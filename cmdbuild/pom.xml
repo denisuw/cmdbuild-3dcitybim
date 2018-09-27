@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.cmdbuild</groupId>
+	<artifactId>cmdbuild-main</artifactId>
+	<packaging>pom</packaging>
+	<version>2.5.1</version>
+	<name>CMDBuild</name>
+	<url>http://www.cmdbuild.org</url>
+	<modules>
+		<module>auth/core</module>
+		<module>auth/default</module>
+		<module>bim/core</module>
+		<module>bim/bimserver</module>
+		<module>cmdbf</module>
+		<module>cmdbuild</module>
+		<module>commons</module>
+		<module>core</module>
+		<module>dao/core</module>
+		<module>dao/postgresql</module>
+		<module>dms/alfresco</module>
+  		<module>dms/cmis</module>
+		<module>dms/core</module>
+		<module>parent</module>
+		<module>scheduler/core</module>
+		<module>scheduler/quartz</module>
+		<module>services/rest</module>
+		<module>shark/client</module>
+		<module>services/sync/core</module>
+		<module>services/sync/internal</module>
+		<module>services/sync/sql</module>
+		<module>shark/commons</module>
+		<module>shark/extensions</module>
+		<module>shark/legacy-extensions</module>
+		<module>shark/server</module>
+		<module>ws-client</module>
+		<module>utils/cmdbuild-utils-crypto</module>
+	</modules>
+</project>
