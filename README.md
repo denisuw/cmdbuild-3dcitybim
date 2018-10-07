@@ -22,6 +22,17 @@ We use some open source applications, and the list are (MS Windows Operating Sys
  - OpenLayers-Cesium integration library, http://openlayers.org/ol-cesium/
  - Apache Tomcat 8, https://tomcat.apache.org/download-80.cgi
  
-INSTALLATION
+# Installation
  1. Install Postgresql. 
-    The easiest way to install PostgreSQL on Windows is with the One Click installer package maintained by EnterpriseDB, which you can get from the page linked to above
+    The easiest way to install PostgreSQL on Windows is with the One Click installer package maintained by EnterpriseDB, which you can get from the page linked to above.
+ 2. Install PostGIS.
+    Run the “StackBuilder” utility in Postgresql and install the PostGIS add-on. If you can not install from “StackBuilder”, try to install using PostGIS windows installer, which you can get from the page linked to above.
+ 3. Install Geoserver.
+ 4. Install BIMServer
+ 5. Install Apache Tomcat
+ 6. Restore 3dcitybim (for cultural heritage) database in Postgresql
+ 7. Run 3dcitydb script to create 3dcity scheme in 3dcitybim database
+ 8. Copy CMDBuild war to webapp in Apache Tomcat and restart the tomcat application
+ 9. Connect CMDBuild to 3dcitybim
+ 10. Login
+    
