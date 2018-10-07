@@ -9,7 +9,7 @@ We use some open source applications, and the list are (MS Windows Operating Sys
 - CMDBuild v2.5.1, http://www.cmdbuild.org/en/download
 - PostgreSQL v9.4.17, https://www.postgresql.org/download/ or https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
 - PostGIS v2.2.3, https://postgis.net/windows_downloads/
-- GeoServer v2.11.0
+- GeoServer v2.11.0, http://geoserver.org/download/
 - 3D City Database v4.0 and Importer/Exporter v4.0 for PostGIS, https://3dcitydb.net/3dcitydb/downloads/
 - BIMServer v1.5.81, with plugin
     - BIMServer JavaScript API 0.0.120
