@@ -35,6 +35,7 @@ We use some open source applications, and the list are (MS Windows Operating Sys
  6. Restore 3dcitybim (for cultural heritage) database in Postgresql
  7. Run 3dcitydb script to create 3dcity scheme in 3dcitybim database
  8. Copy CMDBuild war to webapp in Apache Tomcat and restart the tomcat application
- 9. Connect CMDBuild to 3dcitybim
- 10. Login
+ 9. Upgrade CMDBuild by replace several java class and javascript files with our new codes 
+ 10. Connect CMDBuild to 3dcitybim
+ 11. Login
     
