@@ -20,3 +20,7 @@ We use some open source applications, and the list are:
     - IfcOpenShellPlugin 0.5.24
     - IfcPlugins 0.0.30
  - OpenLayers-Cesium integration library, http://openlayers.org/ol-cesium/
+ - Apache Tomcat 8, https://tomcat.apache.org/download-80.cgi
+ 
+ INSTALLATION
+ - 
