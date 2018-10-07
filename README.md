@@ -11,7 +11,7 @@ We use some open source applications, and the list are (MS Windows Operating Sys
 - PostGIS v2.2.3, https://postgis.net/windows_downloads/
 - GeoServer v2.11.0, http://geoserver.org/download/
 - 3D City Database v4.0 and Importer/Exporter v4.0 for PostGIS, https://3dcitydb.net/3dcitydb/downloads/
-- BIMServer v1.5.81, with plugin
+- BIMServer v1.5.81, with plugin, https://github.com/opensourceBIM/BIMserver/releases/tag/parent-1.5.81
     - BIMServer JavaScript API 0.0.120
     - BIMsurfer 0.0.41
     - BIMvie.ws 0.0.85
