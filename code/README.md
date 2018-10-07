@@ -8,17 +8,11 @@ InteractionDocuemtn
 
 cmmappanel.js UI interface
 
-http://itada.ditsp.itb.ac.id:8090/geoserver
-workspace: cmdbuild
-user : admin
-pass: geoserver
-
-
 ModExternalServices.js C:\Tomcat8\webapps\cmdbuild\javascripts\cmdbuild\view\administration\gis
 ExternalServices.js C:\Tomcat8\webapps\cmdbuild\javascripts\cmdbuild\view\administration\gis
 Proxy.js C:\Tomcat8\webapps\cmdbuild\javascripts\cmdbuild\core\constants
 Gis.js C:\Tomcat8\webapps\cmdbuild\javascripts\cmdbuild\model\core\configuration\builder\gis
-Osm.js / Arcgis.js C:\Tomcat8\webapps\cmdbuild\javascripts\cmdbuild\model\core\configuration\builder\gisf
+Osm.js or Arcgis.js C:\Tomcat8\webapps\cmdbuild\javascripts\cmdbuild\model\core\configuration\builder\gisf
 CMDBuildGeoExt.js C:\Tomcat8\webapps\cmdbuild\javascripts\cmdbuild\view\management\classes\map\geoextension
 Map.js C:\Tomcat8\webapps\cmdbuild\javascripts\cmdbuild\view\management\classes\map\geoextension
 
