@@ -5,9 +5,9 @@ This Project is the source for experimental work of our research about Asset and
 
 We also upgrade the two-dimensional (2D) map in CMDBuild to three-dimensional (3D) map even to 3D Geographical Information System using 3DCityDB, and ol-Cesium.
 
-We use some open source applications, and the list are:
+We use some open source applications, and the list are (MS Windows Operating System):
 - CMDBuild v2.5.1, http://www.cmdbuild.org/en/download
-- PostgreSQL v9.4.17, https://www.postgresql.org/download/
+- PostgreSQL v9.4.17, https://www.postgresql.org/download/ or https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
 - PostGIS v2.2.3, https://postgis.net/windows_downloads/
 - GeoServer v2.11.0
 - 3D City Database v4.0 and Importer/Exporter v4.0 for PostGIS, https://3dcitydb.net/3dcitydb/downloads/
@@ -23,4 +23,5 @@ We use some open source applications, and the list are:
  - Apache Tomcat 8, https://tomcat.apache.org/download-80.cgi
  
  INSTALLATION
- - 
+ 1. Install Postgresql. 
+    The easiest way to install PostgreSQL on Windows is with the One Click installer package maintained by EnterpriseDB, which you can get from the page linked to above
