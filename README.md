@@ -3,7 +3,10 @@ Strasbourg, October 2018.
 
 This Project is the source for experimental work of our research about Asset and Facility Management of Large and Complex Cultural Heritage Site using Open Source 3D-GIS and BIM. We utilize the advantage of CMDBuild that has native mechanisms to model the database, to design workflow, to configure reports and dashboards, to build connectors with external systems, to geo-refer assets, and to administer the system. Not only management of Cultural Heritage Site can be implemented with this software environment but also any applications such as construction management, smart campus, smart village, smart city , etc.
 
-We also upgrade the two-dimensional (2D) map in CMDBuild to three-dimensional (3D) map even to 3D Geographical Information System using 3DCityDB, and ol-Cesium. We are doing the mapping between CityGML scheme in 3DCityDB and IFC scheme in BIMServer.
+We also upgrade the two-dimensional (2D) map in CMDBuild to three-dimensional (3D) map even to 3D Geographical Information System using 3DCityDB, and ol-Cesium. We are doing:
+1. Data Model Designing for Asset/Facility Management of Large and Complex Cultural Heritage (CH) Site, its include temporal aspect that has not established in CityGML yet;
+2. Integrating or Mapping between CityGML scheme in 3DCityDB and IFC scheme in BIMServer;
+3. Spatial Analysis Investigation that would be important in the management of CH asset/facility
 
 We use some open source applications, and the list are (MS Windows Operating System):
 - CMDBuild v2.5.1, http://www.cmdbuild.org/en/download
