@@ -10,3 +10,4 @@ We use Summit Photogrametric , Agisoft PhotoSCan, QGIS and Saga-GIS.
 The pipe line process could be seen below:
 
 ![alt text](https://github.com/denisuw/cmdbuild-3dcitybim/blob/master/database/smart-campus/build-lod4.png)
+![alt text](https://github.com/denisuw/cmdbuild-3dcitybim/blob/master/database/smart-campus/labtek9c.png)
