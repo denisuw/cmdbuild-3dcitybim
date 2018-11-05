@@ -1,5 +1,9 @@
 #CMDBuild re-code
-
+(Management.js)
+Call sequence: init() -> buildConfiguration() -> buildCache() -> buildUserInterface() -> 
+               CMModCard.theMap = Ext.create('CMDBuild.view.management.classes.map.CMMapPanel'
+               in CMMapPanel : this.mapPanel = Ext.create('CMDBuild.Management.CMMap'
+               CMMap extend from Map
 entwine cesium
 Map
 CMMap extend Map
