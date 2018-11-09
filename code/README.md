@@ -1,3 +1,8 @@
+fungsi readGeoFeatures ada di GeoFeatureStore.java (services\gis)
+fungsi getFeatures ada di DefaultGISLogic.java (logic) manggil fungsi geoFeatureStore.readGeoFeatures(layerMetaData, bbox);
+fungsi getGeoCardList ada di Gis.java (servlets\json) manggil fungsi logic.getFeatures(masterClassName, layerName, bbox)
+fungsi readGeoFeatures ada di GeoFeatureStore.java (services\gis) manggil fungsi readGeoFeaturesQuery(layerMetaData, bbox ), 
+
 #CMDBuild re-code
 (Management.js)
 Call sequence: init() -> buildConfiguration() -> buildCache() -> buildUserInterface() -> 
