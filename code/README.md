@@ -1,3 +1,10 @@
+select "FeatureTable"."Master", ST_AsGeoJSON("FeatureTable"."Geometry") AS Geometry, "OwnerCardTable"."IdClass" AS "MasterClassName"
+from "Detail_Building_the_geom" as "FeatureTable" JOIN "Building" AS "OwnerCardTable" ON "FeatureTable"."Master" = "OwnerCardTable"."Id";
+
+SELECT ts.building_id, ST_AsGeoJSON(ST_Collect(ST_Transform(sg.geometry,4326))) as getry 
+FROM "'. $this->Schema.'"."surface_geometry" sg, "'. $this->Schema.'"."thematic_surface" ts 
+WHERE ts.lod4_multi_surface_id=sg.root_id AND ts.building_id is not NULL group by ts.building_id order by ts.building_id';
+
 fungsi readGeoFeatures ada di GeoFeatureStore.java (services\gis)
 fungsi getFeatures ada di DefaultGISLogic.java (logic) manggil fungsi geoFeatureStore.readGeoFeatures(layerMetaData, bbox);
 fungsi getGeoCardList ada di Gis.java (servlets\json) manggil fungsi logic.getFeatures(masterClassName, layerName, bbox)
