@@ -1,6 +1,23 @@
 http://www.cmdbuild.org/forum/project-discussions/514232030
 
 
+SELECT 
+  "OwnerCardTable"."IdClass", 
+  "FeatureTable"."Master", 
+  ST_AsGeoJSON(ST_Collect(ST_Transform("SG".geometry,4326))) as geometry 
+FROM 
+  citydb."CMDB_Building" AS "FeatureTable", 
+  public."Building" AS "OwnerCardTable", 
+  citydb.surface_geometry AS "SG", 
+  citydb.thematic_surface AS "TS"
+WHERE 
+  "FeatureTable"."Master" = "OwnerCardTable"."Id" AND
+  "TS".building_id = "FeatureTable"."Leaf" AND
+  "TS".lod4_multi_surface_id = "SG".root_id
+GROUP BY "OwnerCardTable"."IdClass","FeatureTable"."Master"
+
+
+
 select "FeatureTable"."Master", ST_AsGeoJSON("FeatureTable"."Geometry") AS Geometry, "OwnerCardTable"."IdClass" AS "MasterClassName"
 from "Detail_Building_the_geom" as "FeatureTable" JOIN "Building" AS "OwnerCardTable" ON "FeatureTable"."Master" = "OwnerCardTable"."Id";
 
