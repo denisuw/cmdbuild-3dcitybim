@@ -1,3 +1,6 @@
+http://www.cmdbuild.org/forum/project-discussions/514232030
+
+
 select "FeatureTable"."Master", ST_AsGeoJSON("FeatureTable"."Geometry") AS Geometry, "OwnerCardTable"."IdClass" AS "MasterClassName"
 from "Detail_Building_the_geom" as "FeatureTable" JOIN "Building" AS "OwnerCardTable" ON "FeatureTable"."Master" = "OwnerCardTable"."Id";
 
