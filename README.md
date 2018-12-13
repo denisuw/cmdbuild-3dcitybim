@@ -22,7 +22,7 @@ We use some open source applications, and the list are (MS Windows Operating Sys
     - Console 0.0.10
     - IfcOpenShellPlugin 0.5.24
     - IfcPlugins 0.0.30
- - OpenLayers-Cesium integration library, http://openlayers.org/ol-cesium/
+ - OpenLayers-Cesium integration library, https://github.com/openlayers/ol-cesium/releases/tag/v1.37
     - OL-Cesium v1.37 (Release 1.37 based on OL 4.6.5 and Cesium 1.45)
  - Apache Tomcat 8, https://tomcat.apache.org/download-80.cgi
 
