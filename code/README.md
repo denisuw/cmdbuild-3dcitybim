@@ -1,3 +1,34 @@
+CMDBuild.view.management.classes.map.proxy.Tree.read
+^
+CMDBuild.view.management.classes.map.geoextension.InteractionDocument.featuresLoader
+^
+CMDBuild.view.management.classes.map.geoextension.GisLayer._callLoading
+^
+CMDBuild.view.management.classes.map.geoextension.GisLayer.callLoading
+^
+CMDBuild.view.management.classes.map.geoextension.GisLayer.waitLoading
+^
+CMDBuild.view.management.classes.map.geoextension.GisLayer.getVectorSource
+^
+CMDBuild.view.management.classes.map.geoextension.GisLayer.buildGisLayer
+^
+CMDBuild.view.management.classes.map.geoextension.GisLayer.constructor
+^
+CMDBuild.view.management.classes.map.geoextension.Map.makeLayer
+^
+CMDBuild.Management.CMMap.showLayer
+^
+CMDBuild.Management.CMMap.refreshSingleLayer
+^
+CMDBuild.Management.CMMap.refreshAllLayersRecursive
+^
+CMDBuild.Management.CMMap.refreshAllLayers
+^
+CMDBuild.Management.CMMap._refresh
+^
+CMDBuild.Management.CMMap.refresh
+
+
 http://www.cmdbuild.org/forum/project-discussions/514232030
 
 
