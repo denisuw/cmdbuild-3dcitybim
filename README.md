@@ -23,6 +23,7 @@ We use some open source applications, and the list are (MS Windows Operating Sys
     - IfcOpenShellPlugin 0.5.24
     - IfcPlugins 0.0.30
  - OpenLayers-Cesium integration library, http://openlayers.org/ol-cesium/
+    - OL-Cesium v1.37 (Release 1.37 based on OL 4.6.5 and Cesium 1.45)
  - Apache Tomcat 8, https://tomcat.apache.org/download-80.cgi
 
 ![alt text](https://github.com/denisuw/cmdbuild-3dcitybim/blob/master/3dcitybim.png)
