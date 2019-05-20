@@ -1,0 +1,40 @@
+/*
+Theme Name: Directory Starter
+Description: Adds support for languages written in a Right To Left (RTL) direction.
+It's easy, just a matter of overwriting all the horizontal positioning attributes
+of your CSS stylesheet in a separate stylesheet file named rtl.css.
+See: https://codex.wordpress.org/Right_to_Left_Language_Support
+*/
+
+body.rtl ul, ol{
+    margin: 0 20px 0 20px;
+}
+
+body.rtl .entry-footer>span {
+    margin-left: 10px;
+    margin-right: 0;
+}
+
+body.rtl #primary-nav ul {
+    float: left;
+}
+
+body.rtl #primary-nav ul li {
+    float: right;
+}
+
+body.rtl #primary-nav ul li:last-child {
+    padding-right: inherit;
+    padding-left: 0;
+}
+
+body.rtl .sd-my-account-dd{
+    right: -135px;
+}
+body.rtl #mm-primary-nav .sd-my-account-dd{
+    right: 0;
+}
+
+body.rtl .mm-menu .mm-list{
+    padding: 20px 20px 0 20px;
+}

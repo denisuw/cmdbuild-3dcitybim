@@ -1,0 +1,65 @@
+v1.1.4
+Mobile menu sub items now open on main text click and not just arrow click - CHANGED
+Ultimate Member compatibility - ADDED
+
+v1.1.3
+Fix Tax Meta Class conflicts - FIXED
+
+v1.1.2
+Some CSS bug fixes - CHANGED
+
+v1.1.1
+Some CSS changes - CHANGED
+
+v1.1.0
+Google maps on some mobile devices adds a new span which breaks slide out menu - FIXED
+Font-Awesome moved from CDN to local include to comply with theme review guidelines - CHANGED
+Some CSS changes and fixes to make WYSIWYG editor more representative of frontend display - CHANGED
+Layout issues with archive pages and images - FIXED
+
+v1.0.9
+Sidebar left customizer settings not set fully - FIXED
+Display link back to listing page in buddypress reviews page - ADDED
+
+v1.0.8
+is_bbpress function called without checking if installed - FIXED
+
+v1.0.7
+Footer widget areas now responsive as 4-2-1 - CHANGED
+bbPress compatibility - ADDED
+Alert not displayed correctly - FIXED
+
+v1.0.6
+WooCommerce compatibility - ADDED
+Separate customizer settings added for Copyright section - ADDED
+TinyMCE and WP Editor styles added - ADDED
+
+v1.0.5
+Double text in footer with some settings - FIXED
+
+v1.0.4
+Default page now has sidebar - CHANGED
+Added full width page template - ADDED
+Pages now have their own sidebar - ADDED
+RTL CSS added - ADDED
+Fontawesome css added to theme - ADDED
+Mobile login widget title change from h2 to strong - CHANGED
+Footer text color settings - ADDED
+Footer credit links - ADDED
+CSS changes for GD - CHANGED
+
+v1.0.3
+Primary Sidebar not working - FIXED
+
+v1.0.2
+Search form not responsive - FIXED
+
+v1.0.1
+Footer links not working - FIXED
+Header top section - ADDED
+Settings added to change header top colors - ADDED
+Customizer code refactoring and bug fixes - FIXED
+Customizer styles loading before main styles - FIXED
+Header logo/menu changed from float to inline-block -  CHANGED
+Customizer settings added for logo/menu widths - ADDED
+3rd level menu items sometimes have problems - FIXED

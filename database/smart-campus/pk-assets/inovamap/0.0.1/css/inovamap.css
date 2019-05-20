@@ -1,0 +1,725 @@
+body {
+  overflow: hidden; }
+
+body, html {
+  min-height: 100% !important;
+  height: 100%; }
+
+
+  
+.navbar-offset {
+  margin-top: 0px; }
+
+#map {
+  position: absolute;
+  top: 100px;
+  bottom: 0px;
+  left: 0px;
+  right: 0px;
+  min-height: 100%;
+  height: 100vh;
+  z-index: 2 !important; }
+
+#map .ol-zoom {
+    display: none; }
+	
+ /* #map .ol-zoom {
+  font-size: 1.2em;
+  /*margin-top: 30px;*/ 
+  /*bottom: 10px;
+  left: unset;
+  right: 8px; }*/
+
+.ol-control {
+  margin-left: 15px !important; }
+
+#search {
+  z-index: 999;
+  width: 25%;
+  position: fixed;
+  top: 130px;
+  right: 2%;
+  transition: all .3s ease-in-out; }
+
+#toolbar {
+  position: fixed;
+  z-index: 35;
+  min-width: 100%;
+  top: 19.5%;
+  left: 1.4%;
+  transition: all .3s ease-in-out; }
+  #toolbar #zoom-extent {
+    background: #7B98BC;
+    color: #ffffff;
+    border: none;
+    border-bottom: 1px solid #ffffff;
+    border-radius: 1px;
+    padding: 7px;
+    margin-top: 400px;
+    margin-left: 7px; }
+  #toolbar span {
+    text-align: center; }
+  #toolbar .toolbar-item {
+    background-color: rgba(255, 255, 255, 0.46);
+    border: 1px solid rgba(0, 0, 0, 0.9);
+    border-radius: 4px;
+    margin: 0 3px;
+    padding: 7px;
+    text-align: center; }
+    #toolbar .toolbar-item:hover {
+      cursor: pointer; }
+
+.zoom-top-opened-sidebar {
+  margin-top: 5px; }
+
+.zoom-top-collapsed {
+  margin-top: 45px; }
+
+.mini-submenu {
+  display: block;
+  background-color: rgba(255, 255, 255, 0.46);
+  border: 1px solid rgba(0, 0, 0, 0.9);
+  border-radius: 4px;
+  padding: 9px;
+  /*position: relative;*/
+  width: 42px;
+  text-align: center; }
+
+.mini-submenu-left {
+  position: fixed;
+  top: 130px;
+  left: .5em;
+  z-index: 40; }
+
+.mini-submenu-right {
+  position: fixed;
+  top: 130px;
+  right: .5em;
+  z-index: 40; }
+
+#map {
+  z-index: 35;
+  margin-top: 20px; }
+
+.sidebar {
+  z-index: 45; }
+
+.main-row {
+  position: relative;
+  top: 0; }
+
+.mini-submenu:hover {
+  cursor: pointer; }
+
+.slide-submenu {
+  background: rgba(0, 0, 0, 0.45);
+  display: inline-block;
+  padding: 0 8px;
+  border-radius: 4px;
+  cursor: pointer; }
+
+/* Style the buttons that are used to open and close the accordion panel */
+button.accordion {
+  background-color: #fff;
+  position: relative;
+  color: #444;
+  cursor: pointer;
+  padding: 10px 15px;
+  width: 100%;
+  text-align: left;
+  border: 1px solid #ddd;
+  transition: 0.4s;
+  margin-bottom: -1px; }
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+button.accordion.active, button.accordion:hover {
+  background-color: #fff; }
+
+/* Style the accordion panel. Note: hidden by default */
+div.panelx {
+  padding: 0 15px;
+  background-color: white;
+  display: none; }
+
+.tooltip {
+  position: relative;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  color: white;
+  padding: 4px 8px;
+  opacity: 0.7;
+  white-space: nowrap; }
+
+.tooltip-ol {
+  position: relative;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 4px;
+  color: white;
+  padding: 4px 8px;
+  opacity: 0.7;
+  white-space: nowrap; }
+
+.tooltip-measure {
+  opacity: 1;
+  font-weight: bold; }
+
+.tooltip-static {
+  background-color: #ffcc33;
+  color: black;
+  border: 1px solid white; }
+
+.tooltip-measure:before,
+.tooltip-static:before {
+  border-top: 6px solid rgba(0, 0, 0, 0.5);
+  border-right: 6px solid transparent;
+  border-left: 6px solid transparent;
+  content: "";
+  position: absolute;
+  bottom: -6px;
+  margin-left: -7px;
+  left: 50%; }
+
+.tooltip-static:before {
+  border-top-color: #ffcc33; }
+
+#toolbar-modal {
+  text-align: center;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.85);
+  border: 1px solid black;
+  z-index: 9999;
+  position: fixed;
+  padding: 1px 10px 20px 10px;
+  display: none;
+  top: 35%;
+  left: 0; 
+  height: auto;}
+  #toolbar-modal:hover {
+    cursor: pointer; }
+  #toolbar-modal h5 {
+    padding: 7px;
+    margin-bottom: 3px;
+    padding: 0;
+    padding-bottom: 10px; }
+  #toolbar-modal #close {
+    position: absolute;
+    top: 2%;
+    right: 2%; }
+
+#result {
+  background: white;
+  width: 100%;
+  max-height: 400px;
+  padding-bottom: 15px;
+  overflow-y: scroll; }
+  #result h5 {
+    margin: 0;
+    padding: 0;
+    margin-bottom: 20px;
+    padding: 10px;
+    background: #eee; }
+  #result #result-list {
+    padding: 0 !important;
+    margin-left: 0; }
+    #result #result-list .active {
+      background: #eee;
+      color: #000000; }
+    #result #result-list li {
+      display: inline-block; }
+      #result #result-list li:hover {
+        background: #eee;
+        cursor: pointer; }
+
+.add-border {
+  margin-top: 10%; }
+
+.mytooltip:hover:after {
+  background: #333;
+  background: rgba(0, 0, 0, 0.9);
+  border-radius: 5px;
+  bottom: 26px;
+  color: #ff4d55;
+  content: attr(title);
+  right: 20%;
+  padding: 5px 15px;
+  position: absolute;
+  z-index: 98;
+  width: 220px; }
+
+.mytooltip:hover:before {
+  border: solid;
+  border-color: #333 transparent;
+  border-width: 6px 6px 0 6px;
+  bottom: 20px;
+  content: "";
+  right: 50%;
+  position: absolute;
+  z-index: 99; }
+
+.mytooltip {
+  opacity: 1;
+  radius: 4px !important;
+  background-color: white;
+  color: black  !important;
+  padding: 5px 20px;
+  border-radius: 20px;
+  margin: 50px;
+  text-align: center;
+  font: bold 14px;
+  font-stretch: condensed;
+  text-decoration: none; }
+
+
+.no-js {
+  margin: 0 !important; }
+
+#form-type {
+  background: rgba(255, 255, 255, 0.56);
+  position: absolute;
+  padding: 10px;
+  z-index: 999;
+  display: none; }
+  #form-type label {
+    color: #000000; }
+
+#bar {
+  background: #3B81BF;
+  z-index: 999;
+  position: relative;
+  top: 0;
+  width: 100%;
+  text-align: center;
+  height: 20px;
+  display: none;
+  box-shadow: 2px 2px 2px #eee; }
+  #bar span {
+    position: absolute;
+    background: #3B81BF;
+    padding: 5px;
+    border-radius: 50%;
+    cursor: pointer;
+    color: #fff; }
+
+@media (max-width: 1024px) {
+  #search {
+    width: 30%;
+    top: 160px; }
+
+  #toolbar {
+    top: 170px; } }
+@media (max-width: 768px) {
+  #search {
+    width: 50%;
+    top: 130px; }
+
+  #level {
+    top: 320px !important; }
+
+  #toolbar {
+    top: 140px; }
+
+ }
+@media (max-width: 580px) {
+  #toolbar {
+    display: none; }
+
+  #search {
+    width: 85%;
+    right: 8%;
+    top: 150px; }
+
+ }
+@media (max-width: 425px) {
+  #bar {
+    display: block !important; }
+
+  .high-map {
+    top: 32.5% !important; }
+
+  .high-search {
+    top: 38% !important; }
+
+  #search {
+    top: 40px; }
+
+  .ds-top-header {
+    display: none; }
+
+  #site-header {
+    display: none; } }
+.margin-300 {
+  margin-left: 315px !important; }
+
+#level {
+  position: fixed;
+  top: 300px;
+  left: 24px;
+  padding: 3px;
+  text-align: center;
+  z-index: 30;
+  background: white;
+  border: 1px solid #a0a0a0;
+  height: auto;
+  width: auto;
+  display: none; }
+  #level button {
+    background: transparent;
+    border: none; }
+  #level .up {
+    background: white;
+    border: none;
+    color: #3B81BF;
+    border-bottom: 2px solid black;
+    padding-bottom: 10px; }
+  #level .down {
+    background: white;
+    border: none;
+    color: #3B81BF;
+    border-top: 2px solid black;
+    padding-top: 10px; }
+  #level ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none; }
+    #level ul .active {
+      background: #3B81BF;
+      color: #ffffff;
+      padding: 5px; }
+    #level ul li {
+      margin: 10px 0; }
+
+.ol-popup {
+  position: absolute;
+  background-color: white;
+  -webkit-filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.2));
+  padding: 15px;
+  border-radius: 10px;
+  border: 1px solid #cccccc;
+  bottom: 12px;
+  left: -20px;
+  min-width: 250px; }
+  .ol-popup p {
+    margin: 0; }
+
+.ol-popup:after, .ol-popup:before {
+  top: 100%;
+  border: solid transparent;
+  content: " ";
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none; }
+
+.ol-popup:after {
+  border-top-color: white;
+  border-width: 10px;
+  left: 48px;
+  margin-left: -10px; }
+
+.ol-popup:before {
+  border-top-color: #cccccc;
+  border-width: 11px;
+  left: 48px;
+  margin-left: -11px; }
+
+.ol-popup-closer {
+  text-decoration: none;
+  position: absolute;
+  top: 2px;
+  right: 8px; }
+
+.ol-popup-closer:after {
+  content: "X"; }
+
+.zoom-extent {
+  position: absolute;
+  top: 92.5px;
+  left: 23px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 4px;
+  padding: 3px; }
+
+.zoom-extent a {
+  display: block;
+  margin: 0px;
+  padding: 5px;
+  color: white;
+  font-size: 18px;
+  font-family: 'Lucida Grande', Verdana, Geneva, Lucida, Arial, Helvetica, sans-serif;
+  font-weight: bold;
+  text-decoration: none;
+  text-align: center;
+  line-height: 19px;
+  background: rgba(0, 60, 136, 0.5); }
+
+.zoom-extent a:hover {
+  background: rgba(0, 60, 136, 0.7); }
+
+.zoom-to {
+  border-radius: 2px 2px 0 0; }
+
+/*# sourceMappingURL=inovamap.css.map */
+#map3d{
+	display: block;
+	/*visibility:hidden;*/
+	position: fixed;
+	background: rgba(224, 154, 50, 0.61) none repeat scroll 0% 0%;
+	padding: 15px;
+	border-radius: 5px;
+	border: 1px solid #000;
+    top: 86px;
+    left: 210px;
+	z-index: 999;
+	width: 220px;
+	height:330px;
+    min-width: 300px;
+    text-align: center;
+}
+#map3dmap{
+	display: block;
+	/*visibility:hidden;*/
+	position: fixed;
+	background: rgba(224, 154, 50, 0.61) none repeat scroll 0% 0%;
+
+	border-radius: 5px;
+	border: 1px solid #000;
+
+	z-index: 999;
+	width: 200px;
+	height:300px;
+    min-width: 300px;
+}
+
+#sidebar-print {
+  position: fixed;
+  right: 0;
+  top: 30%;
+  height: auto;
+  display: none;
+  z-index: 999;
+  width: 300px;
+  max-width: 100%;
+  background: #ffffff;
+  border-top: none; }
+  #sidebar-print .close-print {
+    position: absolute;
+    right: 30px;
+    top: 0; }
+    #sidebar-print .close-print:hover {
+      cursor: pointer; }
+	  
+	  
+	  
+	  
+.cesium-viewer-toolbar {
+    display: block;
+    position: absolute;
+    top: 25px;
+    right: 25px;
+	z-index: 999;
+}
+
+.cesium-viewer-cesiumInspectorContainer {
+    display: block;
+    position: absolute;
+    top: 50px;
+    right: 10px;
+}
+
+.cesium-viewer-geocoderContainer {
+    position: relative;
+    display: inline-block;
+    margin: 0 3px;
+}
+.cesium-viewer-geocoderContainer .cesium-geocoder-input {
+    border: solid 1px #444;
+    background-color: rgba(40, 40, 40, 0.7);
+    color: white;
+    display: inline-block;
+    vertical-align: middle;
+    width: 0;
+    height: 32px;
+    margin: 0;
+    padding: 0 32px 0 0;
+    border-radius: 0;
+    box-sizing: border-box;
+    transition: width ease-in-out 0.25s, background-color 0.2s ease-in-out;
+    -webkit-appearance: none;
+}
+
+.cesium-viewer-geocoderContainer:hover .cesium-geocoder-input {
+    border-color: #aef;
+    box-shadow: 0 0 8px #fff;
+}
+
+.cesium-viewer-geocoderContainer .cesium-geocoder-input:focus {
+    border-color: #ea4;
+    background-color: rgba(15, 15, 15, 0.9);
+    box-shadow: none;
+    outline: none;
+}
+
+.cesium-viewer-geocoderContainer:hover .cesium-geocoder-input,
+.cesium-viewer-geocoderContainer .cesium-geocoder-input:focus,
+.cesium-viewer-geocoderContainer .cesium-geocoder-input-wide {
+    padding-left: 4px;
+    width: 250px;
+}
+
+.cesium-viewer-geocoderContainer .search-results {
+    position: absolute;
+    background-color: #000;
+    color: #eee;
+    overflow-y: auto;
+    opacity: 0.8;
+    width: 100%;
+}
+
+.cesium-viewer-geocoderContainer .search-results ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.cesium-viewer-geocoderContainer .search-results ul li {
+    font-size: 14px;
+    padding: 3px 10px;
+}
+.cesium-viewer-geocoderContainer .search-results ul li:hover {
+    cursor: pointer;
+}
+
+.cesium-viewer-geocoderContainer .search-results ul li.active {
+    background: #48b;
+}
+
+.cesium-geocoder-searchButton {
+    background-color: #303336;
+    display: inline-block;
+    position: absolute;
+    cursor: pointer;
+    width: 32px;
+    top: 1px;
+    right: 1px;
+    height: 30px;
+    vertical-align: middle;
+    fill: #edffff;
+}
+
+.cesium-geocoder-searchButton:hover {
+    background-color: #48b;
+}
+.cesium-svgPath-svg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.cesium-button {
+    display: inline-block;
+    position: relative;
+    background: #303336;
+    border: 1px solid #444;
+    color: #edffff; /* For text buttons */
+    fill: #edffff; /* For SVG buttons */
+    border-radius: 4px;
+    padding: 5px 12px;
+    margin: 2px 3px;
+    cursor: pointer;
+    overflow: hidden;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.cesium-button:focus {
+    color: #fff; /* For text buttons */
+    fill: #fff; /* For SVG buttons */
+    border-color: #ea4;
+    outline: none;
+}
+
+.cesium-button:hover {
+    color: #fff; /* For text buttons */
+    fill: #fff; /* For SVG buttons */
+    background: #48b;
+    border-color: #aef;
+    box-shadow: 0 0 8px #fff;
+}
+
+.cesium-button:active {
+    color: #000; /* For text buttons */
+    fill: #000; /* For SVG buttons */
+    background: #adf;
+    border-color: #fff;
+    box-shadow: 0 0 8px #fff;
+}
+
+.cesium-button:disabled,
+.cesium-button-disabled,
+.cesium-button-disabled:focus,
+.cesium-button-disabled:hover,
+.cesium-button-disabled:active {
+    background: #303336;
+    border-color: #444;
+    color: #646464; /* For text buttons */
+    fill: #646464; /* For SVG buttons */
+    box-shadow: none;
+    cursor: default;
+}
+
+.cesium-button option {
+    background-color: #000;
+    color: #eee;
+}
+
+.cesium-button option:disabled {
+    color: #777;
+}
+
+.cesium-button input, .cesium-button label {
+    cursor: pointer;
+}
+
+.cesium-button input {
+    vertical-align: sub;
+}
+
+.cesium-toolbar-button {
+    box-sizing: border-box;
+    width: 32px;
+    height: 32px;
+    border-radius: 14%;
+    padding: 0;
+    vertical-align: middle;
+    z-index: 0; /* Workaround for rounded raster image corners in Chrome */
+}
+
+.cesium-performanceDisplay-defaultContainer {
+    position: absolute;
+    top: 50px;
+    right: 10px;
+    text-align: right;
+}
+
+.cesium-performanceDisplay {
+    background-color: rgba(40, 40, 40, 0.7);
+    padding: 7px;
+    border-radius: 5px;
+    border: 1px solid #444;
+    font: bold 12px sans-serif;
+}
+
+.cesium-performanceDisplay-fps {
+    color: #e52;
+}
+
+.cesium-performanceDisplay-ms {
+    color: #de3;
+}
+
