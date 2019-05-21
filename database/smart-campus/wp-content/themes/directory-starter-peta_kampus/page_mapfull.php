@@ -81,18 +81,21 @@ get_header('map');
                 <div class="panel-body-property">
                     <button class="accordion">Kampus ITB</button>
                     <div class="panelx">
-					  <div class="form-group">
+					<div class="form-group">
                       <div class="col-md-10 columns">
-					<label class="checkbox-inline"><i class="icon-star"></i> <a type="button" onclick="doSomething2('ganesa');">Kampus Ganesa & Saraga</a></label>
-					<label class="checkbox-inline"><i class="icon-star"></i> <a type="button" onclick="doSomething2('jatinangor');">Kampus Jatinangor</a></label>
-					<label class="checkbox-inline"><i class="icon-star"></i> <a type="button" onclick="bookmark(109.90902, -7.258526);">Rektorat ITB Taman Sari</a></label>
-                    
-                </div>
-                    </div>
-					
+						<label class="checkbox-inline"><i class="icon-star"></i> <a type="button" onclick="doSomething2('ganesa');">Kampus Ganesa & Saraga</a></label>
+						<label class="checkbox-inline"><i class="icon-star"></i> <a type="button" onclick="doSomething2('jatinangor');">Kampus Jatinangor</a></label>
+						<label class="checkbox-inline"><i class="icon-star"></i> <a type="button" onclick="bookmark(109.90902, -7.258526);">Rektorat ITB Taman Sari</a></label>
+					  </div>
+                    </div>					
 					</div>
                     
-                    <button class="accordion">Fasilitas Umum</button>
+
+					
+					<div id="divLayerMenu">		
+					
+					
+                    <!--<button class="accordion">Fasilitas Umum</button>
                     <div class="panelx">
                       <div class="form-group">
                       <div class="col-md-10 columns">
@@ -120,7 +123,7 @@ get_header('map');
                       <input type="checkbox" name="Checkboxes" id="Checkboxes_Kumquats" value="Kumquats">
                       Lainnya
                     </label>
-                </div>
+					</div>
                     </div>
                     </div>
                     
@@ -144,7 +147,7 @@ get_header('map');
                       <input type="checkbox" name="Checkboxes" id="Checkboxes_Kumquats" value="Kumquats">
                       Ruang Kuliah Multimedia
                     </label>			                   
-                </div>
+					</div>
                     </div>
                     </div>
 					
@@ -168,7 +171,7 @@ get_header('map');
                       <input type="checkbox" name="Checkboxes" id="Checkboxes_Kumquats" value="Kumquats">
                       Masalah SarPras
                     </label>
-</div>
+					</div>
                     </div>
                     </div>
 					<button class="accordion">Lingkungan</button>
@@ -191,9 +194,11 @@ get_header('map');
                       <input type="checkbox" name="Checkboxes" id="Checkboxes_Parkiran" value="Pohon" onclick="lingkunganClick('parkiran');" checked>
                       Parkiran
                     </label>
-</div>
+					</div>
                     </div>
-                    </div>
+                    </div>-->
+					
+					</div>
                 </div>
               </div>
             </div>

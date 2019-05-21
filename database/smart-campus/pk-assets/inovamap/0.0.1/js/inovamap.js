@@ -70,6 +70,7 @@ var lantai = [1, 0, -1];
 var container = document.getElementById('popup');
 var content = document.getElementById('popup-content');
 var closer = document.getElementById('popup-closer');
+var divLayerMenu = document.getElementById('divLayerMenu');
  var popUpOver = new ol.Overlay(({
         element: container,
         autoPan: true,
@@ -77,73 +78,6 @@ var closer = document.getElementById('popup-closer');
           duration: 250
         }
       }));
-//EDIT by AYAW
-var infoCLicked = false;
-var kampusLayers = [];
-var lingkunganLayers = [];
-var bangunan = new ol.layer.Tile({
-              title: "bangunan",
-              name: "bangunan",
-              baseLayer: false,
-              source: new ol.source.TileWMS({
-                url: "http://localhost:8585/geoserver/wms/petakampusitb" ,
-                params: { 
-                  'LAYERS' : 'petakampusitb:Bangunan',
-                },
-				serverType: 'geoserver',
-				crossOrigin: ''
-              })
-            });
-var pohon = new ol.layer.Tile({
-              title: "pohon",
-              name: "pohon",
-              baseLayer: false,
-              source: new ol.source.TileWMS({
-                url: "http://localhost:8585/geoserver/wms/petakampusitb" ,
-                params: { 
-                  'LAYERS' : 'petakampusitb:Pohon',
-                }                                
-              })
-            });
-var taman = new ol.layer.Tile({
-              title: "taman",
-              name: "taman",
-              baseLayer: false,
-              source: new ol.source.TileWMS({
-                url: "http://localhost:8585/geoserver/wms/petakampusitb" ,
-                params: { 
-                  'LAYERS' : 'petakampusitb:Taman',
-                }                                
-              })
-            });
-var jalan = new ol.layer.Tile({
-              title: "jalan",
-              name: "jalan",
-              baseLayer: false,
-              source: new ol.source.TileWMS({
-                url: "http://localhost:8585/geoserver/wms/petakampusitb" ,
-                params: { 
-                  'LAYERS' : 'petakampusitb:Jalan',
-                }                                
-              })
-            });
-var parkiran = new ol.layer.Tile({
-              title: "parkiran",
-              name: "parkiran",
-              baseLayer: false,
-              source: new ol.source.TileWMS({
-                url: "http://localhost:8585/geoserver/wms/petakampusitb" ,
-                params: { 
-                  'LAYERS' : 'petakampusitb:Parkiran',
-                }                                
-              })
-            });
-//END of EDIT by AYAW
-lingkunganLayers.push(jalan);
-kampusLayers.push(bangunan);
-lingkunganLayers.push(taman);
-lingkunganLayers.push(pohon);
-lingkunganLayers.push(parkiran);
 
 //Openstreet map
 var raster = new ol.layer.Tile({
@@ -198,13 +132,76 @@ var vector = new ol.layer.Vector({
 });
 //vector.setZIndex(999);
 overlayLayers.push(vector);
+
+//Initializing Layer Menu
+$.ajax({
+  url: '/helper/basemap-category-get.php',
+  type: 'GET',
+  success: function(response) {
+    var json = $.parseJSON(response);
+	var strMenu = "";
+	var lastCategory = "";
+    json.data.forEach(function(item) {
+		
+		if(item.category_name != lastCategory)
+		{
+			if(lastCategory != "")
+			{
+				strMenu += "</div></div></div>";
+			}
+				strMenu += '<button class="accordion child">'+item.category_name+'</button>';
+				strMenu += '<div class="panelx"><div class="form-group"><div class="col-md-10 columns">';
+
+		}
+		
+		var checked = '';
+		if(item.visible == true)
+			checked = 'checked';
+			
+		strMenu += '<label class="checkbox-inline" for="'+item.name+'" > '+
+                     '<input type="checkbox" class="layer_item" name="'+item.name+'" id="'+item.name+'" value="'+item.name+'" '+checked+'>'+item.title+'</label>';
+		
+		lastCategory = item.category_name;
+    });
+	
+	divLayerMenu.innerHTML = strMenu;
+	//divLayerMenu.innerHTML = '<button class="accordion">Test</button><div class="panelx"><div class="form-group"><div class="col-md-10 columns"><label class="checkbox-inline" for="Checkboxes_Apple"><input type="checkbox" name="Checkboxes" id="Checkboxes_Apple" value="Apple">Keran Air Minum </label> </div> </div> </div>';
+  },
+  error:function(err){
+    console.log(err);
+  },
+  async: false
+});
+
+var acc = document.getElementsByClassName("child");
+var i;
+
+	for (i = 0; i < acc.length; i++) {
+	  acc[i].addEventListener("click", function() {
+		/* Toggle between adding and removing the "active" class,
+		to highlight the button that controls the panel */
+		this.classList.toggle("active");
+
+		/* Toggle between hiding and showing the active panel */
+		var panel = this.nextElementSibling;
+		if (panel.style.display === "block") {
+		  panel.style.display = "none";
+		} else {
+		  panel.style.display = "block";
+		}
+	  });
+	}
+
+
+	
 //Initializing Map
 $.ajax({
-  url: '/petakampus/helper/basemap-get.php',
+  url: '/helper/basemap-get.php',
   type: 'GET',
   success: function(response) {
     var json = $.parseJSON(response);
     json.data.forEach(function(item) {
+	
         if(item.base_layer == "main_layer") {
         if(item.active == true) {
           if(item.name == "Ruangan") {
@@ -248,6 +245,8 @@ $.ajax({
             });
 		//	overlay.setZIndex(999);
             overlayLayers.push(overlay);
+			
+			//console.log(overlay);
           }
         }
       } else if(item.base_layer == "tile") {
@@ -271,6 +270,27 @@ $.ajax({
         } 
       }
     });
+	
+	//console.log(overlayLayers);
+	var li = document.getElementsByClassName("layer_item");
+	var i;
+
+		for (i = 0; i < li.length; i++) {
+		  li[i].addEventListener("change", function() {
+			var objLayer = getLayerByName(this.value,overlayLayers);
+			console.log(objLayer);
+			if(objLayer != null)
+			{
+				if(this.checked) {
+					objLayer.setVisible(true);
+				} 
+				else {
+					objLayer.setVisible(false);
+				}
+			}
+		});
+		}
+	
   },
   error:function(err){
     console.log(err);
@@ -308,18 +328,6 @@ var layersGroupDB=[
             name:'Main Layers',
             openInLayerSwitcher: false,
             layers: mainLayers
-    }),
-	new ol.layer.Group({
-            title: 'Kampus Layers',
-            name:'Kampus Layers',
-            openInLayerSwitcher: false,
-            layers: kampusLayers
-    }),
-	new ol.layer.Group({
-            title: 'Lingkungan Layers',
-            name:'Lingkungan Layers',
-            openInLayerSwitcher: false,
-            layers: lingkunganLayers
     })
 ]; 
 // End Variables
@@ -333,6 +341,24 @@ var layersGroupDB=[
   closer.blur();
   return false;
 };
+
+function getLayerByName(layerName, arrLayer)
+{
+console.log(arrLayer);
+console.log(layerName);
+
+	for(var i = 0;i<arrLayer.length;i++)
+	{
+	console.log(arrLayer[i].get('name'));
+		if (arrLayer[i].get('name') == layerName)
+		{
+			return arrLayer[i];
+		}
+	}
+	
+	return null;
+}
+
 function capitalizeFirst(s)
 {
     return s[0].toUpperCase() + s.slice(1);
@@ -408,32 +434,6 @@ function getInfo(layer, evt) {
     view: view
   });
 
-  var element = document.getElementById('popup');
-var popup = new ol.Overlay({
-  element: element,
-  positioning: 'bottom-center',
-  stopEvent: false
-});
-map.addOverlay(popup);
-/*map.on('click', function(evt) 
-{
-	element.innerHTML = '';
-
-  var feature = map.forEachFeatureAtPixel(evt.pixel, function(feature, layer) {
-  /console.log(feature);
-    return feature;
-  });
-
-  if (feature) {
-    var coord = feature.getGeometry().getCoordinates();
-    var props = feature.getProperties();
-    var info = "<h2>bvnvb</h2>";
-    // Offset the popup so it points at the middle of the marker not the tip
-    popup.setOffset([0, -22]);
-    popup.show(coord, info);
-  } 
-});		*/
-
 var collection = new ol.Collection();
 var featureOverlay = new ol.layer.Vector({
   map: map,
@@ -474,7 +474,7 @@ var iconStyleBuilding = new ol.style.Style({
     anchorXUnits: 'fraction',
     anchorYUnits: 'pixels',
     opacity: 0.75,
-    src: '/petakampus/pk-assets/images/mapmarker/office-building.png'
+    src: '/pk-assets/images/mapmarker/office-building.png'
   }))
 });
 
@@ -484,7 +484,7 @@ var iconStyleRoomEntrance = new ol.style.Style({
     anchorXUnits: 'fraction',
     anchorYUnits: 'pixels',
     opacity: 0.75,
-    src: '/petakampus/pk-assets/images/mapmarker/entrance.png'
+    src: '/pk-assets/images/mapmarker/entrance.png'
   }))
 });
 
@@ -552,11 +552,9 @@ ol.proj.addProjection(UTM48Sprojection);
         }
       });
     map.on('click', function(evt) {
-	
-      var layer = map.forEachLayerAtPixel(evt.pixel, function(layer) {   		
+      var layer = map.forEachLayerAtPixel(evt.pixel, function(layer) {      
         return layer;
       });
-	  
       if(layer.get('baseLayer') == true) {
 
       } else {
@@ -573,7 +571,6 @@ window.CenterMap =  function (lon, lat, zoomlevel) {
 	
 window.setInitial =  function (obj){
 	obj._initValue = obj.value;
-	
 }
 window.doSomething =  function (obj){
 //if you want to verify a change took place...
@@ -593,63 +590,14 @@ if(obj._initValue == obj.value){
 }
 
 window.doSomething2 =  function (text){
+
   if (text == "ganesa") { 
   CenterMap(107.610368,-6.890886,16) } else if (text == "jatinangor") 
   
   {CenterMap(107.769207,  -6.928818,16)}
 }
 
-//EDIT ayaw 
-window.lingkunganClick =  function (text){
-	if (text == "pohon") 
-	{ 
-		if(pohon.getVisible() == true)
-		{
-			pohon.setVisible(false);
-		}
-		else
-		{
-			pohon.setVisible(true);
-		}
-	}
-	
-	if (text == "taman") 
-	{ 
-		if(taman.getVisible() == true)
-		{
-			taman.setVisible(false);
-		}
-		else
-		{
-			taman.setVisible(true);
-		}
-	}
-	
-	if (text == "jalan") 
-	{ 
-		if(jalan.getVisible() == true)
-		{
-			jalan.setVisible(false);
-		}
-		else
-		{
-			jalan.setVisible(true);
-		}
-	}
-	
-	if (text == "parkiran") 
-	{ 
-		if(parkiran.getVisible() == true)
-		{
-			parkiran.setVisible(false);
-		}
-		else
-		{
-			parkiran.setVisible(true);
-		}
-	}
-}
-//end of edit ayaw
+
 
 var imageStyle = new ol.style.Circle({
   radius: 10,
@@ -763,7 +711,7 @@ $("#search").submit(function(e) {
                   var format = new ol.format.WKT();
                   var wkt = format.writeGeometry(geom);
                   var namaItem = (realVal.nm_gedung) ? realVal.nm_gedung : realVal.nama_ruang;
-                  body = '<li style="padding: 5px;" onClick="CenterMapGeometry(\'' + wkt + '\'' + ',' + '\'' + namaItem + '\')"><img style="margin-right: 10px;" src="/petakampus/pk-assets/images/office-block.svg" class="img-responsive pull-left" width="20px">'+ namaItem + '</li><hr>';
+                  body = '<li style="padding: 5px;" onClick="CenterMapGeometry(\'' + wkt + '\'' + ',' + '\'' + namaItem + '\')"><img style="margin-right: 10px;" src="/pk-assets/images/office-block.svg" class="img-responsive pull-left" width="20px">'+ namaItem + '</li><hr>';
                   $("#result-list").append(body);
 				  $("#loading-spinner").hide();
 			//	  $("#clear-search").show();
@@ -1260,6 +1208,4 @@ function marker(obj) {
 
 		$("#filter-toggle").on('click', function(e) {
 			$('#filter').slideToggle(500);
-		 });	 
-
- 
+		 });
