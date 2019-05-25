@@ -8,7 +8,6 @@ $(function(){
 window.app = {};
 var app =window.app;
 
-
     app.ZoomExtentControl = function (opt_options) {
 
         var options = opt_options || {};
@@ -391,7 +390,8 @@ function getInfo(layer, evt) {
 			//alert(coord);
             response.features.forEach(function(feature){
               id = feature.id;
-              console.log(id);
+              console.log(feature);
+			  console.log(feature.properties.img_url);
               if (id.toLowerCase().indexOf("gedung") >= 0){
                 name = feature.properties.nm_gedung;
                 content.innerHTML = '<p>Nama Gedung : '+ name + '<br/>Link Gallery Gedung <br/>Foto Gedung<br/><img src="/helper/chilly.jpg" alt="Mountain View" style="width:100px;height:100px;"></p>';
@@ -400,9 +400,10 @@ function getInfo(layer, evt) {
                 content.innerHTML = '<p>Nama Jalan : '+ name +'</p>';
               } else {
                 name = feature.id;
-                content.innerHTML = '<p>Nama : ' + name + '<br/>Link Gallery Gedung <br/>Foto Gedung<br/><img src="/helper/chilly.jpg" alt="Mountain View" style="width:100px;height:100px;"></p>';
+				content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/Pohon/'+feature.properties.img_url+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+name+'</h4><p> 	Deskripsi	</p></div></div>';
+                //content.innerHTML = '<p>Nama : ' + name + '<br/>Link Foto <br/>Foto Object<br/><img src="http://localhost:8082/petakampus/pk-assets/image-data/Pohon/'+feature.properties.img_url+'" alt="Mountain View" style="width:100px;height:100px;"></p>';
               }
-              popUpOver.setPosition(coord);
+              popUpOver.setPosition(coord);		  
             });
         }
       });

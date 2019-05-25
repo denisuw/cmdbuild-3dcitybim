@@ -8,7 +8,15 @@
 get_header('map'); 
 //get_header(); 
  ?>
-
+<style>
+	.bs-example{
+    	margin: 200px 150px 0;
+    }
+    .popover-title .close{
+        position: relative;
+        bottom: 3px;
+    }
+</style>
 <div>
 <div class="navbar-offset"></div>
 <div id="bar">
@@ -24,10 +32,22 @@ get_header('map');
 	<button id="button-down"><i class="fa fa-arrow-down"></i></button>
 </div> -->
 <div id="map"></div>
-<div id="popup" class="ol-popup">
+<!--<div id="popup" class="ol-popup">
   <a href="#" id="popup-closer" class="ol-popup-closer"></a>
   <div id="popup-content"></div>
+</div>-->
+
+<div class="popover fade top in" role="tooltip" id="popup" style="top:-155px;left:-137px;width:300px;display: block;">
+<div class="arrow" style="left: 50%;"></div>
+<h3 class="popover-title">Layer Info 
+<a href="#" class="close" data-dismiss="alert" id="popup-closer">×</a>
+</h3>
+<div class="popover-content" id="popup-content">
+
+
 </div>
+</div>
+
 <div class="row main-row">
   <div class="col-sm-4 col-md-3 sidebar sidebar-left pull-left" style="z-index: 99999; position: fixed;">
 	<div id="accordion-left" class="panel-group sidebar-body">
@@ -284,9 +304,6 @@ get_header('map');
 
 				<button class="btn btn-default" type="button" id="filter-toggle">
 					<i class="fa fa-arrow-down" aria-hidden="true"></i>
-				</button>
-				<button class="btn btn-default" type="button" id="info-toggle">
-					<i class="fa fa-info-circle" aria-hidden="true"></i>
 				</button>
 			</span>
 		  </div>
