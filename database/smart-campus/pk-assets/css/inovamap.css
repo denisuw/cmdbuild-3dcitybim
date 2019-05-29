@@ -327,7 +327,7 @@ div.panelx {
     top: 130px; }
 
   #level {
-    top: 320px !important; }
+    top: 50px !important; }
 
   #toolbar {
     top: 140px; }
@@ -371,7 +371,7 @@ div.panelx {
 
 #level {
   position: fixed;
-  top: 300px;
+  top: 150px;
   left: 24px;
   padding: 3px;
   text-align: center;

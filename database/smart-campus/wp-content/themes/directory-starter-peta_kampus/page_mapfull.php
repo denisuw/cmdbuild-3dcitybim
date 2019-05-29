@@ -22,15 +22,15 @@ get_header('map');
 <div id="bar">
 	<span class="text-center" id="collapse-navbar"><i class="fa fa-arrow-down" aria-hidden="true"></i></span>
 </div>
-<!-- div id="level">
+<div id="level">
 	<button id="button-up"><i class="fa fa-arrow-up up"></i></button>
-	<ul id="level-list"> -->
+	<ul id="level-list"> 
 		<!-- <li>2</li>
 		<li class="active">1</li>
 		<li>0</li> -->
-<!--	</ul>
+	</ul>
 	<button id="button-down"><i class="fa fa-arrow-down"></i></button>
-</div> -->
+</div> 
 <div id="map"></div>
 <!--<div id="popup" class="ol-popup">
   <a href="#" id="popup-closer" class="ol-popup-closer"></a>
