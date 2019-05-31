@@ -419,12 +419,20 @@ function getInfo(layer, evt) {
               console.log(feature);
 			  console.log(feature.properties.img_url);
               if (id.toLowerCase().indexOf("gedung") >= 0){
-                name = feature.properties.nm_gedung;
-                content.innerHTML = '<p>Nama Gedung : '+ name + '<br/>Link Gallery Gedung <br/>Foto Gedung<br/><img src="/helper/chilly.jpg" alt="Mountain View" style="width:100px;height:100px;"></p>';
+                name = feature.properties.Name;
+				content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/Gedung/'+feature.properties.img_url+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+name+'</h4></div></div>';
               } else if (id.toLowerCase().indexOf("jalan") >= 0){
                 name = feature.id;
                 content.innerHTML = '<p>Nama Jalan : '+ name +'</p>';
-              } else {
+              }
+			  else if (id.toLowerCase().indexOf("ruangan") >= 0)
+			  {
+                name = feature.properties.NamaRuang;
+				var namaLantai = feature.properties.NamaLantai;
+				var namaGedung = feature.properties.NamaGedung;
+				content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/Ruang/'+feature.properties.img_url+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">Ruang: '+name+'</h4><p>Lantai: '+namaLantai +'<br>Gedung: '+namaGedung +'</p></div></div>';
+              }			  
+			  else {
                 name = feature.id;
 				content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/Pohon/'+feature.properties.img_url+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+name+'</h4><p> 	Deskripsi	</p></div></div>';
                 //content.innerHTML = '<p>Nama : ' + name + '<br/>Link Foto <br/>Foto Object<br/><img src="http://localhost:8082/petakampus/pk-assets/image-data/Pohon/'+feature.properties.img_url+'" alt="Mountain View" style="width:100px;height:100px;"></p>';
@@ -571,7 +579,7 @@ ol.proj.addProjection(UTM48Sprojection);
         switch (e.key) {
           case 'resolution':
 		  //alert(map.getView().getZoom());
-          if(map.getView().getZoom() > 16) {
+          if(map.getView().getZoom() > 17) {
             $("#level").show();
 			var ruang = getLayerByName("Ruangan",overlayLayers);
 			if(ruang != null)
@@ -785,6 +793,15 @@ $("#search").submit(function(e) {
   $.each(lantai, function(index, value) {
     activeNumber = 0;
     isActive = activeNumber == value ? 'active' : '';
+	if(value >= 0)
+	{
+        value = "L"+(value+1);
+    }
+	else
+	{
+		value = "B"+(value*-1);
+	}
+	
     var body = '<li class="'+ isActive +'">'+ value +'</li>';
     $("#level-list").append(body);
   });
@@ -798,11 +815,19 @@ $("#search").submit(function(e) {
 	  console.log(lantai);
       $.each(lantai, function(index, val) 
 	  {
-		//console.log("val:"+val);
-		//console.log("index:"+index);
+		console.log("val:"+val);
+		console.log("index:"+index);
         if(val <= maxLantai) 
 		{
           isActive = activeNumber == val ? 'active' : '';
+		  if(val >= 0)
+			{
+				val = "L"+(val+1);
+			}
+			else
+			{
+				val = "B"+(val*-1);
+			}
           var body = '<li class="'+ isActive +'">' + val + '</li>';
           $("#level-list").append(body);  		  
 		      if (index==0) SelectLantai(lantai[1]);
@@ -822,7 +847,7 @@ $("#search").submit(function(e) {
   });
   $("#button-down").click(function(e) {
    console.log(lantai);
-    if(activeNumber >= minLantai) {
+    if(activeNumber > minLantai) {
       activeNumber--;
       console.log(lantai[2]);
       //lantai = lantai.map(function(val){return --val;});
@@ -830,6 +855,14 @@ $("#search").submit(function(e) {
       $.each(lantai, function(index, val) {
         if(val >= minLantai) {
           isActive = activeNumber == val ? 'active' : '';
+		  if(val >= 0)
+			{
+				val = "L"+(val+1);
+			}
+			else
+			{
+				val = "B"+(val*-1);
+			}
           var body = '<li class="'+ isActive +'">' + val + '</li>';
           $("#level-list").append(body);
 		      if (index==0) SelectLantai(lantai[1]);
