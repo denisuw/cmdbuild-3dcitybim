@@ -8,7 +8,6 @@ $(function(){
 window.app = {};
 var app =window.app;
 
-
     app.ZoomExtentControl = function (opt_options) {
 
         var options = opt_options || {};
@@ -67,9 +66,12 @@ var overlayLayers = [];
 var mainLayers = [];
 var vectorLayer;
 var lantai = [1, 0, -1];
+var maxLantai = 10;
+var minLantai = -2;
 var container = document.getElementById('popup');
 var content = document.getElementById('popup-content');
 var closer = document.getElementById('popup-closer');
+var divLayerMenu = document.getElementById('divLayerMenu');
  var popUpOver = new ol.Overlay(({
         element: container,
         autoPan: true,
@@ -131,13 +133,100 @@ var vector = new ol.layer.Vector({
 });
 //vector.setZIndex(999);
 overlayLayers.push(vector);
+
+//Get distinct Lantai
+$.ajax({
+  url: '/helper/floor-distinct-get.php',
+  type: 'GET',
+  success: function(response) {
+	lantai = [];
+    var json = $.parseJSON(response);
+    json.data.forEach(function(item) {
+			lantai.push(item.id_lantai);
+    });
+	
+	console.log(lantai);
+	maxLantai = getMaxOfArray(lantai);
+	minLantai = getMinOfArray(lantai);
+	
+	console.log(maxLantai);
+	console.log(minLantai);
+  },
+  error:function(err){
+    console.log(err);
+  },
+  async: false
+});
+
+//Initializing Layer Menu
+$.ajax({
+  url: '/helper/basemap-category-get.php',
+  type: 'GET',
+  success: function(response) {
+    var json = $.parseJSON(response);
+	var strMenu = "";
+	var lastCategory = "";
+    json.data.forEach(function(item) {
+		
+		if(item.category_name != lastCategory)
+		{
+			if(lastCategory != "")
+			{
+				strMenu += "</div></div></div>";
+			}
+				strMenu += '<button class="accordion child">'+item.category_name+'</button>';
+				strMenu += '<div class="panelx"><div class="form-group"><div class="col-md-10 columns">';
+
+		}
+		
+		var checked = '';
+		if(item.visible == true)
+			checked = 'checked';
+			
+		strMenu += '<label class="checkbox-inline" for="'+item.name+'" > '+
+                     '<input type="checkbox" class="layer_item" name="'+item.name+'" id="'+item.name+'" value="'+item.name+'" '+checked+'>'+item.title+'</label>';
+		
+		lastCategory = item.category_name;
+    });
+	
+	divLayerMenu.innerHTML = strMenu;
+	//divLayerMenu.innerHTML = '<button class="accordion">Test</button><div class="panelx"><div class="form-group"><div class="col-md-10 columns"><label class="checkbox-inline" for="Checkboxes_Apple"><input type="checkbox" name="Checkboxes" id="Checkboxes_Apple" value="Apple">Keran Air Minum </label> </div> </div> </div>';
+  },
+  error:function(err){
+    console.log(err);
+  },
+  async: false
+});
+
+var acc = document.getElementsByClassName("child");
+var i;
+
+	for (i = 0; i < acc.length; i++) {
+	  acc[i].addEventListener("click", function() {
+		/* Toggle between adding and removing the "active" class,
+		to highlight the button that controls the panel */
+		this.classList.toggle("active");
+
+		/* Toggle between hiding and showing the active panel */
+		var panel = this.nextElementSibling;
+		if (panel.style.display === "block") {
+		  panel.style.display = "none";
+		} else {
+		  panel.style.display = "block";
+		}
+	  });
+	}
+
+
+	
 //Initializing Map
 $.ajax({
-  url: '/petakampus/helper/basemap-get.php',
+  url: '/helper/basemap-get.php',
   type: 'GET',
   success: function(response) {
     var json = $.parseJSON(response);
     json.data.forEach(function(item) {
+	
         if(item.base_layer == "main_layer") {
         if(item.active == true) {
           if(item.name == "Ruangan") {
@@ -149,7 +238,7 @@ $.ajax({
                 url: item.url ,
                 params: { 
                   'LAYERS' : item.params,
-                  'CQL_FILTER' : "id_lantai like '%01'"
+                  'CQL_FILTER' : "NamaLantai like 'Lantai 1'"
                 },
                 crossOrigin: 'anonymous' //'anonymous' //,                                
               }),
@@ -181,6 +270,8 @@ $.ajax({
             });
 		//	overlay.setZIndex(999);
             overlayLayers.push(overlay);
+			
+			//console.log(overlay);
           }
         }
       } else if(item.base_layer == "tile") {
@@ -204,6 +295,27 @@ $.ajax({
         } 
       }
     });
+	
+	//console.log(overlayLayers);
+	var li = document.getElementsByClassName("layer_item");
+	var i;
+
+		for (i = 0; i < li.length; i++) {
+		  li[i].addEventListener("change", function() {
+			var objLayer = getLayerByName(this.value,overlayLayers);
+			console.log(objLayer);
+			if(objLayer != null)
+			{
+				if(this.checked) {
+					objLayer.setVisible(true);
+				} 
+				else {
+					objLayer.setVisible(false);
+				}
+			}
+		});
+		}
+	
   },
   error:function(err){
     console.log(err);
@@ -254,6 +366,24 @@ var layersGroupDB=[
   closer.blur();
   return false;
 };
+
+function getLayerByName(layerName, arrLayer)
+{
+console.log(arrLayer);
+console.log(layerName);
+
+	for(var i = 0;i<arrLayer.length;i++)
+	{
+	console.log(arrLayer[i].get('name'));
+		if (arrLayer[i].get('name') == layerName)
+		{
+			return arrLayer[i];
+		}
+	}
+	
+	return null;
+}
+
 function capitalizeFirst(s)
 {
     return s[0].toUpperCase() + s.slice(1);
@@ -286,7 +416,8 @@ function getInfo(layer, evt) {
 			//alert(coord);
             response.features.forEach(function(feature){
               id = feature.id;
-              console.log(id);
+              console.log(feature);
+			  console.log(feature.properties.img_url);
               if (id.toLowerCase().indexOf("gedung") >= 0){
                 name = feature.properties.nm_gedung;
                 content.innerHTML = '<p>Nama Gedung : '+ name + '<br/>Link Gallery Gedung <br/>Foto Gedung<br/><img src="/helper/chilly.jpg" alt="Mountain View" style="width:100px;height:100px;"></p>';
@@ -295,9 +426,10 @@ function getInfo(layer, evt) {
                 content.innerHTML = '<p>Nama Jalan : '+ name +'</p>';
               } else {
                 name = feature.id;
-                content.innerHTML = '<p>Nama : ' + name + '<br/>Link Gallery Gedung <br/>Foto Gedung<br/><img src="/helper/chilly.jpg" alt="Mountain View" style="width:100px;height:100px;"></p>';
+				content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/Pohon/'+feature.properties.img_url+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+name+'</h4><p> 	Deskripsi	</p></div></div>';
+                //content.innerHTML = '<p>Nama : ' + name + '<br/>Link Foto <br/>Foto Object<br/><img src="http://localhost:8082/petakampus/pk-assets/image-data/Pohon/'+feature.properties.img_url+'" alt="Mountain View" style="width:100px;height:100px;"></p>';
               }
-              popUpOver.setPosition(coord);
+              popUpOver.setPosition(coord);		  
             });
         }
       });
@@ -369,7 +501,7 @@ var iconStyleBuilding = new ol.style.Style({
     anchorXUnits: 'fraction',
     anchorYUnits: 'pixels',
     opacity: 0.75,
-    src: '/petakampus/pk-assets/images/mapmarker/office-building.png'
+    src: '/pk-assets/images/mapmarker/office-building.png'
   }))
 });
 
@@ -379,7 +511,7 @@ var iconStyleRoomEntrance = new ol.style.Style({
     anchorXUnits: 'fraction',
     anchorYUnits: 'pixels',
     opacity: 0.75,
-    src: '/petakampus/pk-assets/images/mapmarker/entrance.png'
+    src: '/pk-assets/images/mapmarker/entrance.png'
   }))
 });
 
@@ -438,10 +570,21 @@ ol.proj.addProjection(UTM48Sprojection);
 
         switch (e.key) {
           case 'resolution':
+		  //alert(map.getView().getZoom());
           if(map.getView().getZoom() > 16) {
             $("#level").show();
+			var ruang = getLayerByName("Ruangan",overlayLayers);
+			if(ruang != null)
+			{
+				ruang.setVisible(true);
+			}
           } else {
             $("#level").hide();
+			var ruang = getLayerByName("Ruangan",overlayLayers);
+			if(ruang != null)
+			{
+				ruang.setVisible(false);
+			}
           }
           break;
         }
@@ -491,6 +634,8 @@ window.doSomething2 =  function (text){
   
   {CenterMap(107.769207,  -6.928818,16)}
 }
+
+
 
 var imageStyle = new ol.style.Circle({
   radius: 10,
@@ -604,7 +749,7 @@ $("#search").submit(function(e) {
                   var format = new ol.format.WKT();
                   var wkt = format.writeGeometry(geom);
                   var namaItem = (realVal.nm_gedung) ? realVal.nm_gedung : realVal.nama_ruang;
-                  body = '<li style="padding: 5px;" onClick="CenterMapGeometry(\'' + wkt + '\'' + ',' + '\'' + namaItem + '\')"><img style="margin-right: 10px;" src="/petakampus/pk-assets/images/office-block.svg" class="img-responsive pull-left" width="20px">'+ namaItem + '</li><hr>';
+                  body = '<li style="padding: 5px;" onClick="CenterMapGeometry(\'' + wkt + '\'' + ',' + '\'' + namaItem + '\')"><img style="margin-right: 10px;" src="/pk-assets/images/office-block.svg" class="img-responsive pull-left" width="20px">'+ namaItem + '</li><hr>';
                   $("#result-list").append(body);
 				  $("#loading-spinner").hide();
 			//	  $("#clear-search").show();
@@ -645,19 +790,25 @@ $("#search").submit(function(e) {
   });
 
   $("#button-up").click(function(e) {
-    if(lantai[0] <= 10) {
+  console.log(activeNumber);
+    if(activeNumber < maxLantai) {
       activeNumber++;
-      lantai = lantai.map(function(val){return ++val;});
+      //lantai = lantai.map(function(val){return ++val;});
       $("#level-list").html('');
-      $.each(lantai, function(index, val) {
-        if(val <= 10) {
+	  console.log(lantai);
+      $.each(lantai, function(index, val) 
+	  {
+		//console.log("val:"+val);
+		//console.log("index:"+index);
+        if(val <= maxLantai) 
+		{
           isActive = activeNumber == val ? 'active' : '';
           var body = '<li class="'+ isActive +'">' + val + '</li>';
           $("#level-list").append(body);  		  
 		      if (index==0) SelectLantai(lantai[1]);
-		    }		
+		}		
       });
-      var cql = "id_lantai like '%"+ activeNumber +"'";
+      var cql = "id_lantai = "+ activeNumber +"";
       console.log(cql);
       map.getLayers().forEach(function(layer){
         layer.getLayers().forEach(function(lyr){
@@ -670,20 +821,22 @@ $("#search").submit(function(e) {
     }
   });
   $("#button-down").click(function(e) {
-    if(lantai[2] >= -2) {
+   console.log(lantai);
+    if(activeNumber >= minLantai) {
       activeNumber--;
       console.log(lantai[2]);
-      lantai = lantai.map(function(val){return --val;});
+      //lantai = lantai.map(function(val){return --val;});
       $("#level-list").html('');
       $.each(lantai, function(index, val) {
-        if(val >= -2) {
+        if(val >= minLantai) {
           isActive = activeNumber == val ? 'active' : '';
           var body = '<li class="'+ isActive +'">' + val + '</li>';
           $("#level-list").append(body);
 		      if (index==0) SelectLantai(lantai[1]);
         }
       });
-      var cql = "id_lantai like '%"+ activeNumber +"'";
+      var cql = "id_lantai = "+ activeNumber +"";
+	  console.log(cql);
       map.getLayers().forEach(function(layer){
         layer.getLayers().forEach(function(lyr){
           if(lyr.get('name') == 'Ruangan') {
@@ -698,6 +851,14 @@ $("#search").submit(function(e) {
   $("#clear").on('click', function(e) {   
     featureOverlay.getSource().clear(); 
   });
+
+  function getMaxOfArray(numArray) {
+	return Math.max.apply(null, numArray);
+	}
+	
+	function getMinOfArray(numArray) {
+	return Math.min.apply(null, numArray);
+	}
 
   //Setting peta
   $("input[name=peta-dasar]").change(function(e) {
@@ -1102,4 +1263,3 @@ function marker(obj) {
 		$("#filter-toggle").on('click', function(e) {
 			$('#filter').slideToggle(500);
 		 });
-		 

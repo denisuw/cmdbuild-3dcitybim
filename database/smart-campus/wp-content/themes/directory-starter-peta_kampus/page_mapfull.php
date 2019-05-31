@@ -29,7 +29,7 @@ get_header('map');
 		<li class="active">1</li>
 		<li>0</li> -->
 	</ul>
-	<button id="button-down"><i class="fa fa-arrow-down"></i></button>
+	<button id="button-down"><i class="fa fa-arrow-down down"></i></button>
 </div> 
 <div id="map"></div>
 <!--<div id="popup" class="ol-popup">
