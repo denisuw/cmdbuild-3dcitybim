@@ -65,6 +65,7 @@ var backgroundLayers = [];
 var overlayLayers = [];
 var mainLayers = [];
 var vectorLayer;
+var lantaiStart =[1, 0, -1];
 var lantai = [1, 0, -1];
 var maxLantai = 10;
 var minLantai = -2;
@@ -417,26 +418,28 @@ function getInfo(layer, evt) {
             response.features.forEach(function(feature){
               id = feature.id;
               console.log(feature);
+			  console.log(id);
 			  console.log(feature.properties.img_url);
+			  
+			  var namaLantai = "";
+			  var namaGedung = "";
+				
               if (id.toLowerCase().indexOf("gedung") >= 0){
                 name = feature.properties.Name;
-				content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/Gedung/'+feature.properties.img_url+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+name+'</h4></div></div>';
               } else if (id.toLowerCase().indexOf("jalan") >= 0){
                 name = feature.id;
-                content.innerHTML = '<p>Nama Jalan : '+ name +'</p>';
               }
 			  else if (id.toLowerCase().indexOf("ruangan") >= 0)
 			  {
                 name = feature.properties.NamaRuang;
-				var namaLantai = feature.properties.NamaLantai;
-				var namaGedung = feature.properties.NamaGedung;
-				content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/Ruang/'+feature.properties.img_url+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">Ruang: '+name+'</h4><p>Lantai: '+namaLantai +'<br>Gedung: '+namaGedung +'</p></div></div>';
+				namaLantai = feature.properties.NamaLantai;
+				namaGedung = feature.properties.NamaGedung;
               }			  
 			  else {
                 name = feature.id;
-				content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/Pohon/'+feature.properties.img_url+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+name+'</h4><p> 	Deskripsi	</p></div></div>';
-                //content.innerHTML = '<p>Nama : ' + name + '<br/>Link Foto <br/>Foto Object<br/><img src="http://localhost:8082/petakampus/pk-assets/image-data/Pohon/'+feature.properties.img_url+'" alt="Mountain View" style="width:100px;height:100px;"></p>';
               }
+			  
+			  getPopupContent(id, name, feature.properties.img_url , namaLantai,namaGedung);
               popUpOver.setPosition(coord);		  
             });
         }
@@ -597,6 +600,8 @@ ol.proj.addProjection(UTM48Sprojection);
           break;
         }
       });
+	  
+	  //map click
     map.on('click', function(evt) {
       var layer = map.forEachLayerAtPixel(evt.pixel, function(layer) {      
         return layer;
@@ -667,7 +672,7 @@ var line = null;
 }
 
 
-window.CenterMapGeometry =  function (wkt, name) {
+window.CenterMapGeometry =  function (wkt, name, header) {
   var feature = new ol.format.WKT().readFeature(wkt);
   var buildingList = $("#result-list li");
   for (var i = buildingList.length - 1; i >= 0; i--) {
@@ -676,15 +681,21 @@ window.CenterMapGeometry =  function (wkt, name) {
       $(buildingList[i]).addClass('active');
     }
   }
-	feature.getGeometry().transform(UTM48Sprojection,'EPSG:3857');
+	//feature.getGeometry().transform(UTM48Sprojection,'EPSG:3857');
 	// first clear any existing features in the overlay
   featureOverlay.getSource().clear(); 
   featureOverlay.getSource().addFeature(feature);
   
-  var ext=feature.getGeometry().getExtent();
+   var ext=feature.getGeometry().getExtent();
 	var center = ol.extent.getCenter(ext);
 	var lon=center[0];
 	var lat=center[1];
+	//console.log(center);
+	console.log(header);
+	//search by properties Id
+	//var ruang = getLayerByName("Ruangan",overlayLayers);
+	//console.log(overlayLayers);
+	getPopupContent(header, name, "" , "","");
 	
 	popUpOver.setPosition(center);
    map.getView().setCenter([lon, lat]);	
@@ -694,6 +705,35 @@ window.CenterMapGeometry =  function (wkt, name) {
 
 }
 
+function getPopupContent(layername, itemname, imgurl , namaLantai = null,namaGedung = null)
+{
+	//var name = "";
+	var str = "";
+	var lyr = layername.split(".");
+	lyr = lyr[0];
+	
+	name = itemname;
+	content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/'+lyr+'/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+lyr+': '+	name+'</h4></div></div>';
+		
+	/*if (layername.toLowerCase().indexOf("gedung") >= 0){
+        name = itemname;
+		content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/Gedung/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+lyr+': '+name+'</h4></div></div>';
+    } else if (layername.toLowerCase().indexOf("jalan") >= 0){
+      name = itemname;
+      content.innerHTML = '<p>Nama Jalan : '+ name +'</p>';
+    }
+	else if (layername.toLowerCase().indexOf("ruangan") >= 0)
+	{
+        name = itemname;
+		content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/Ruang/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+lyr+': '+	name+'</h4></div></div>';
+    }			  
+	else {
+        name = itemname;
+		content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/Pohon/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+name+'</h4><p> 	Deskripsi	</p></div></div>';
+    }*/
+	
+	//return str;
+}
 
 function addRandomFeature(lon,lat) {
     var x =lon;
@@ -755,9 +795,13 @@ $("#search").submit(function(e) {
 				  
                   var geom=new ol.format.GeoJSON().readFeature(realVal.geo).getGeometry();
                   var format = new ol.format.WKT();
+				  console.log(center);
+				  
                   var wkt = format.writeGeometry(geom);
-                  var namaItem = (realVal.nm_gedung) ? realVal.nm_gedung : realVal.nama_ruang;
-                  body = '<li style="padding: 5px;" onClick="CenterMapGeometry(\'' + wkt + '\'' + ',' + '\'' + namaItem + '\')"><img style="margin-right: 10px;" src="/pk-assets/images/office-block.svg" class="img-responsive pull-left" width="20px">'+ namaItem + '</li><hr>';
+				  console.log(realVal);
+                  var namaItem = (realVal.Name) ? realVal.Name : realVal.NamaRuang;
+				  var idItem = realVal.Id;
+                  body = '<li style="padding: 5px;" onClick="CenterMapGeometry(\'' + wkt + '\'' + ',' + '\'' + namaItem + '\''+ ',' + '\'' + capitalizeFirst(j) + '\')"><img style="margin-right: 10px;" src="/pk-assets/images/office-block.svg" class="img-responsive pull-left" width="20px">'+ namaItem + '</li><hr>';
                   $("#result-list").append(body);
 				  $("#loading-spinner").hide();
 			//	  $("#clear-search").show();
@@ -790,7 +834,8 @@ $("#search").submit(function(e) {
       }
   });
   */
-  $.each(lantai, function(index, value) {
+
+  $.each(lantaiStart, function(index, value) {
     activeNumber = 0;
     isActive = activeNumber == value ? 'active' : '';
 	if(value >= 0)
@@ -808,30 +853,35 @@ $("#search").submit(function(e) {
 
   $("#button-up").click(function(e) {
   console.log(activeNumber);
-    if(activeNumber < maxLantai) {
+    if(activeNumber < maxLantai) 
+	{
       activeNumber++;
-      //lantai = lantai.map(function(val){return ++val;});
+	 
       $("#level-list").html('');
-	  console.log(lantai);
+	  //console.log(lantai);
       $.each(lantai, function(index, val) 
 	  {
-		console.log("val:"+val);
-		console.log("index:"+index);
-        if(val <= maxLantai) 
+		//console.log("val:"+val);
+		//console.log("index:"+index);
+		if(val == activeNumber ||  val == (activeNumber+ 1) || val == (activeNumber- 1))
 		{
-          isActive = activeNumber == val ? 'active' : '';
-		  if(val >= 0)
+			if(val <= maxLantai) 
 			{
-				val = "L"+(val+1);
-			}
-			else
-			{
-				val = "B"+(val*-1);
-			}
-          var body = '<li class="'+ isActive +'">' + val + '</li>';
-          $("#level-list").append(body);  		  
-		      if (index==0) SelectLantai(lantai[1]);
-		}		
+			  isActive = activeNumber == val ? 'active' : '';
+			  if(val >= 0)
+				{
+					val = "L"+(val+1);
+				}
+				else
+				{
+					val = "B"+(val*-1);
+				}
+				console.log("val:"+val+" "+isActive);
+			  var body = '<li class="'+ isActive +'">' + val + '</li>';
+			  $("#level-list").append(body);  		  
+				  if (index==0) SelectLantai(lantai[1]);
+			}		
+		}
       });
       var cql = "id_lantai = "+ activeNumber +"";
       console.log(cql);
@@ -853,20 +903,23 @@ $("#search").submit(function(e) {
       //lantai = lantai.map(function(val){return --val;});
       $("#level-list").html('');
       $.each(lantai, function(index, val) {
-        if(val >= minLantai) {
-          isActive = activeNumber == val ? 'active' : '';
-		  if(val >= 0)
-			{
-				val = "L"+(val+1);
+	  if(val == activeNumber ||  val == (activeNumber+ 1) || val == (activeNumber- 1))
+		{
+			if(val >= minLantai) {
+			  isActive = activeNumber == val ? 'active' : '';
+			  if(val >= 0)
+				{
+					val = "L"+(val+1);
+				}
+				else
+				{
+					val = "B"+(val*-1);
+				}
+			  var body = '<li class="'+ isActive +'">' + val + '</li>';
+			  $("#level-list").append(body);
+				  if (index==0) SelectLantai(lantai[1]);
 			}
-			else
-			{
-				val = "B"+(val*-1);
-			}
-          var body = '<li class="'+ isActive +'">' + val + '</li>';
-          $("#level-list").append(body);
-		      if (index==0) SelectLantai(lantai[1]);
-        }
+		}
       });
       var cql = "id_lantai = "+ activeNumber +"";
 	  console.log(cql);
