@@ -2,6 +2,7 @@ $("#result").hide();
 $("#sidebar-print").hide();
 $("[class='checkbox']").bootstrapSwitch();
 $("#filter").hide();
+document.getElementById("map3d").style.visibility = "hidden";
 $(function(){ 
 
 //Variables
@@ -486,11 +487,8 @@ var featureOverlay = new ol.layer.Vector({
 
 
 var ol3d = new olcs.OLCesium({map: map}); // map is the ol.Map instance
-var scene = ol3d.getCesiumScene();
-var terrainProvider = new Cesium.CesiumTerrainProvider({
-  url: '//assets.agi.com/stk-terrain/world'
-});
-scene.terrainProvider = terrainProvider;
+var ol3dnew = new olcs.OLCesium({map: map, target: 'map3dmap'});
+var scenenew = ol3dnew.getCesiumScene();
   
   
   var highlightStyle = new ol.style.Style({
@@ -982,8 +980,9 @@ $("#search").submit(function(e) {
       break;
     }
   });
-  $("input[name=mode-peta]").change(function(e) {
+  $("input[type=radio][name=mode-peta]").change(function(e) {
     var value = $(this).val();
+	//alert(value);
     switch(value) {
       case 'mode-2d':
         ol3d.setEnabled(false);
@@ -991,9 +990,37 @@ $("#search").submit(function(e) {
 
       case 'mode-3d':
         ol3d.setEnabled(true);
+		var scene = ol3d.getCesiumScene();
+		var terrainProvider = new Cesium.CesiumTerrainProvider({
+		  url : Cesium.IonResource.fromAssetId(3956), //ayaw
+				requestVertexNormals : true
+		});
+		scene.terrainProvider = terrainProvider;		
       break;
     }
   });
+  
+  $("#sidebyside").click(function(e) {   
+  //alert(document.getElementById("map3d").style.visibility=="hidden");
+	if(document.getElementById("map3d").style.visibility=="hidden")
+	  {
+		$("#map3d").css('visibility','visible');
+		ol3dnew.setEnabled(true);
+			var scene = ol3dnew.getCesiumScene();
+			var terrainProvider = new Cesium.CesiumTerrainProvider({
+			  url : Cesium.IonResource.fromAssetId(3956), //ayaw
+					requestVertexNormals : true
+			});
+			scene.terrainProvider = terrainProvider;	
+	  }
+	  else
+	  {
+		$("#map3d").css('visibility','hidden');
+		ol3dnew.setEnabled(false);	
+	  }
+	 });
+	 
+
 
 var wgs84Sphere = new ol.Sphere(6378137);
 var activeNumber;
@@ -1345,7 +1372,7 @@ function marker(obj) {
 	  
 });
 
+$("#filter-toggle").on('click', function(e) {
+	$('#filter').slideToggle(500);
+});
 
-		$("#filter-toggle").on('click', function(e) {
-			$('#filter').slideToggle(500);
-		 });

@@ -36,7 +36,7 @@ get_header('map');
   <a href="#" id="popup-closer" class="ol-popup-closer"></a>
   <div id="popup-content"></div>
 </div>-->
-
+<div id="map3d"><b>3D VIEW</b><hr><div id="map3dmap"></div></div>
 <div class="popover fade top in" role="tooltip" id="popup" style="top:-155px;left:-137px;width:300px;display: block;">
 <div class="arrow" style="left: 50%;"></div>
 <h3 class="popover-title">Layer Info 
@@ -273,14 +273,17 @@ get_header('map');
 	<!--div class="row">
 	  <div class="col-md-12"-->		
 		<form action="" id="form-search">
-		  <div class="input-group">
-                         
-			<span class="input-group-btn" data-toggle="tooltip" title="Layer">
-				
-				<button class="btn btn-default" id="listButton" type="button">
+		  <div class="input-group">			
+			<span class="input-group-btn" data-toggle="tooltip">
+				<button  type="button" id="sidebyside" class="btn btn-default" title="3D View">   
+					<span class="glyphicon glyphicon-globe">
+						<span class="sr-only"></span>
+					</span>
+				</button>
+				<button class="btn btn-default" id="listButton" type="button" title="Layer">
 					<span class="glyphicon glyphicon-list-alt"></span>
 				</button>
-				<button class="btn btn-default" id="routeButton" type="button">
+				<button class="btn btn-default" id="routeButton" type="button" title="Layer">
 					<span class="glyphicon glyphicon-tasks"></span>
 				</button>
 			</span>
