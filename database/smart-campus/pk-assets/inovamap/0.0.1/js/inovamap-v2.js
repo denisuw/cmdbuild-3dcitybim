@@ -452,7 +452,7 @@ function getInfo(layer, evt) {
                   var format = new ol.format.WKT();
                   var wkt = format.writeGeometry(geom);
                   var namaItem = (realVal.nm_gedung) ? realVal.nm_gedung : realVal.nama_ruang;
-                  body = '<li style="padding: 5px;" onClick="CenterMapGeometry(\'' + wkt + '\'' + ',' + '\'' + namaItem + '\')"><img style="margin-right: 10px;" src="/petakampus/pk-assets/images/office-block.svg" class="img-responsive pull-left" width="20px">'+ namaItem + '</li><hr>';
+                  body = '<li style="padding: 5px;" onClick="CenterMapGeometry(\'' + wkt + '\'' + ',' + '\'' + namaItem + '\')"><img style="margin-right: 10px;" src="/pk-assets/images/office-block.svg" class="img-responsive pull-left" width="20px">'+ namaItem + '</li><hr>';
                   $("#result-list").append(body);
 				  $("#loading-spinner").hide();
 				  $("#clear-search").show();
@@ -571,7 +571,7 @@ var iconStyleBuilding = new ol.style.Style({
     anchorXUnits: 'fraction',
     anchorYUnits: 'pixels',
     opacity: 0.75,
-    src: '/petakampus/pk-assets/images/mapmarker/office-building.png'
+    src: '/pk-assets/images/mapmarker/office-building.png'
   }))
 });
 
@@ -581,7 +581,7 @@ var iconStyleRoomEntrance = new ol.style.Style({
     anchorXUnits: 'fraction',
     anchorYUnits: 'pixels',
     opacity: 0.75,
-    src: '/petakampus/pk-assets/images/mapmarker/entrance.png'
+    src: '/pk-assets/images/mapmarker/entrance.png'
   }))
 });
 
