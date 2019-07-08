@@ -427,17 +427,13 @@ function getInfo(layer, evt) {
 				
               if (id.toLowerCase().indexOf("gedung") >= 0){
                 name = feature.properties.Name;
-<<<<<<< HEAD
 				content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/pk-assets/image-data/Gedung/'+feature.properties.img_url+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+name+'</h4></div></div>';
-=======
->>>>>>> 553fe7ce3927ac9f24331d211e1006be781a20b5
               } else if (id.toLowerCase().indexOf("jalan") >= 0){
                 name = feature.id;
               }
 			  else if (id.toLowerCase().indexOf("ruangan") >= 0)
 			  {
                 name = feature.properties.NamaRuang;
-<<<<<<< HEAD
 				var namaLantai = feature.properties.NamaLantai;
 				var namaGedung = feature.properties.NamaGedung;
 				content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/pk-assets/image-data/Ruang/'+feature.properties.img_url+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">Ruang: '+name+'</h4><p>Lantai: '+namaLantai +'<br>Gedung: '+namaGedung +'</p></div></div>';
@@ -446,14 +442,9 @@ function getInfo(layer, evt) {
                 name = feature.id;
 				content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/pk-assets/image-data/Pohon/'+feature.properties.img_url+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+name+'</h4><p> 	Deskripsi	</p></div></div>';
                 //content.innerHTML = '<p>Nama : ' + name + '<br/>Link Foto <br/>Foto Object<br/><img src="http://localhost:8082/pk-assets/image-data/Pohon/'+feature.properties.img_url+'" alt="Mountain View" style="width:100px;height:100px;"></p>';
-=======
 				namaLantai = feature.properties.NamaLantai;
 				namaGedung = feature.properties.NamaGedung;
               }			  
-			  else {
-                name = feature.id;
->>>>>>> 553fe7ce3927ac9f24331d211e1006be781a20b5
-              }
 			  
 			  getPopupContent(id, name, feature.properties.img_url , namaLantai,namaGedung);
               popUpOver.setPosition(coord);		  
