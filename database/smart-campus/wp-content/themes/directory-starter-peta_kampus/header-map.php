@@ -32,7 +32,8 @@
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.css">
 	
 	<script src="/petakampus/pk-assets/js/proj4.js"></script>
-	<script src="/petakampus/pk-assets/ol3-cesium/Cesium/Cesium.js"></script>
+	<script src="/petakampus/pk-assets/ol3-cesium/inject_ol_cesium.js"></script>
+	<!--<script src="/petakampus/pk-assets/ol3-cesium/Cesium/Cesium.js"></script>-->
 	<script src="/petakampus/pk-assets/ol3-cesium/olcesium.js"></script>
 	<script type="text/javascript" src="//code.jquery.com/jquery-3.2.1.min.js"></script>
 	<script src="/petakampus/pk-assets/js/bootstrap-switch.min.js"></script>

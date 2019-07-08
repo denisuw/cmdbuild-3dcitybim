@@ -1,0 +1,5 @@
+Instalasi 3dCityDb
+1. Download 3DCityDB-4.0.1 https://www.3dcitydb.org/3dcitydb/d3ddatabase/
+2. Copy folder 3DCityDB-4.0.1 ke drive C:/
+3. Ubah Settingan CONNECTION_DETAILS.bat
+4. Run CREATE_DB.bat

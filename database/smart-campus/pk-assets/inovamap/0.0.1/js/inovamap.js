@@ -3,9 +3,12 @@ $("#sidebar-print").hide();
 $("[class='checkbox']").bootstrapSwitch();
 $("#filter").hide();
 document.getElementById("map3d").style.visibility = "hidden";
+
 $(function(){ 
 
 //Variables
+
+
 window.app = {};
 var app =window.app;
 
@@ -989,16 +992,85 @@ $("#search").submit(function(e) {
       break;
 
       case 'mode-3d':
+	  	//alert('aaa');
+		getBuildingData();
         ol3d.setEnabled(true);
 		var scene = ol3d.getCesiumScene();
 		var terrainProvider = new Cesium.CesiumTerrainProvider({
 		  url : Cesium.IonResource.fromAssetId(3956), //ayaw
 				requestVertexNormals : true
 		});
-		scene.terrainProvider = terrainProvider;		
+		scene.terrainProvider = terrainProvider;	
+
+	 
       break;
     }
   });
+  
+  function getBuildingData()
+  {  	
+//alert('aaa');
+	var getbuilding;
+	//var buildingid=[];
+	var buildingid=[];
+	var citydbname = 'petakampusitb';
+	
+	var buildings=[];
+	var lod=4;
+	
+	 $.post('helper/requestdata.php?request=2',{lod:lod},function(dbbuilding){
+
+           var parsed = JSON.parse(dbbuilding);          
+
+           for(var x in parsed){
+                buildings.push(parsed[x]);
+                
+        	    getbuilding = JSON.parse(buildings[x]);
+        	    buildingid.push(getbuilding.crs.properties.building);
+                
+                
+              }
+            var checking=true; 
+            var defaultstyle=new ol.style.Style({
+             fill: new ol.style.Fill({
+             color: '#ffcc33'
+              }),
+             stroke: new ol.style.Stroke({
+              color: '#000000',
+              width: 2
+              }),
+              image: new ol.style.Circle({
+              radius: 7,
+              fill: new ol.style.Fill({
+                color: '#ffcc33'
+               })
+             })
+             });
+            
+			console.log(defaultstyle);
+             for(var i=0;i<buildings.length;i++)
+             {
+             	var vectorsource = new ol.source.Vector();
+             
+                 var geojsonFormat = new ol.format.GeoJSON();
+                var features = geojsonFormat.readFeatures(buildings[i],
+                   {featureProjection: 'EPSG:3857'});
+                   vectorsource.addFeatures(features);
+             
+	           var json=new ol.layer.Vector({
+                 title: citydbname+"_building_lod"+lod+"_"+buildingid[i],
+                 source: vectorsource,
+                 style: defaultstyle
+                    });
+              
+                map.addLayer(json);
+               // var layer = findBy(ol2d.getLayerGroup(),citydbname);
+                setTimeout(function() {
+                        map.getView().fit(json.getSource().getExtent(), map.getSize());
+                       }, 200);                
+                }               
+      	 });
+  }
   
   $("#sidebyside").click(function(e) {   
   //alert(document.getElementById("map3d").style.visibility=="hidden");
