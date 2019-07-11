@@ -1,6 +1,6 @@
 ﻿DROP VIEW gis.view_building_room_geom;
 CREATE OR REPLACE VIEW gis.view_building_room_geom AS
-select D."Name" as "NamaGedung",C."Name" as "NamaLantai",B."Description" as "NamaRuang", A."Master" as "RuangId",A."Geometry",
+select D."Name" as "NamaGedung",C."Name" as "NamaLantai",B."Code" as "Code",B."Description" as "NamaRuang", A."Master" as "RuangId",A."Geometry",
 case when C."Name" = 'Basement' then -1 
 when C."Name" = 'Basement 2' then -2 
 when C."Name" = 'Lantai 1' then '0' 
