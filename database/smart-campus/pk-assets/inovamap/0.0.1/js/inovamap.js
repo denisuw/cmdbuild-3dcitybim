@@ -141,7 +141,7 @@ overlayLayers.push(vector);
 
 //Get distinct Lantai
 $.ajax({
-  url: '/helper/floor-distinct-get.php',
+  url: 'helper/floor-distinct-get.php',
   type: 'GET',
   success: function(response) {
 	lantai = [];
@@ -165,7 +165,7 @@ $.ajax({
 
 //Initializing Layer Menu
 $.ajax({
-  url: '/helper/basemap-category-get.php',
+  url: 'helper/basemap-category-get.php',
   type: 'GET',
   success: function(response) {
     var json = $.parseJSON(response);
@@ -226,7 +226,7 @@ var i;
 	
 //Initializing Map
 $.ajax({
-  url: '/helper/basemap-get.php',
+  url: 'helper/basemap-get.php',
   type: 'GET',
   success: function(response) {
     var json = $.parseJSON(response);
@@ -430,24 +430,18 @@ function getInfo(layer, evt) {
 				
               if (id.toLowerCase().indexOf("gedung") >= 0){
                 name = feature.properties.Name;
-				content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/pk-assets/image-data/Gedung/'+feature.properties.img_url+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+name+'</h4></div></div>';
-         //     } else if (id.toLowerCase().indexOf("jalan") >= 0){
-         //       name = feature.id;
+              } else if (id.toLowerCase().indexOf("jalan") >= 0){
+                name = feature.id;
               }
 			  else if (id.toLowerCase().indexOf("ruangan") >= 0)
 			  {
                 name = feature.properties.NamaRuang;
 				namaLantai = feature.properties.NamaLantai;
 				namaGedung = feature.properties.NamaGedung;
-				content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/pk-assets/image-data/Ruang/'+feature.properties.img_url+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">Ruang: '+name+'</h4><p>Lantai: '+namaLantai +'<br>Gedung: '+namaGedung +'</p></div></div>';
               }			  
 			  else {
                 name = feature.id;
-				content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/pk-assets/image-data/Pohon/'+feature.properties.img_url+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+name+'</h4><p> 	Deskripsi	</p></div></div>';
-                //content.innerHTML = '<p>Nama : ' + name + '<br/>Link Foto <br/>Foto Object<br/><img src="http://localhost:8082/pk-assets/image-data/Pohon/'+feature.properties.img_url+'" alt="Mountain View" style="width:100px;height:100px;"></p>';
-				namaLantai = feature.properties.NamaLantai;
-				namaGedung = feature.properties.NamaGedung;
-              }			  
+              }
 			  
 			  getPopupContent(id, name, feature.properties.img_url , namaLantai,namaGedung);
               popUpOver.setPosition(coord);		  
@@ -720,11 +714,11 @@ function getPopupContent(layername, itemname, imgurl , namaLantai = null,namaGed
 	lyr = lyr[0];
 	
 	name = itemname;
-	content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/pk-assets/image-data/'+lyr+'/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+lyr+': '+	name+'</h4></div></div>';
+	content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/'+lyr+'/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+lyr+': '+	name+'</h4></div></div>';
 		
 	/*if (layername.toLowerCase().indexOf("gedung") >= 0){
         name = itemname;
-		content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/pk-assets/image-data/Gedung/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+lyr+': '+name+'</h4></div></div>';
+		content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/Gedung/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+lyr+': '+name+'</h4></div></div>';
     } else if (layername.toLowerCase().indexOf("jalan") >= 0){
       name = itemname;
       content.innerHTML = '<p>Nama Jalan : '+ name +'</p>';
@@ -732,11 +726,11 @@ function getPopupContent(layername, itemname, imgurl , namaLantai = null,namaGed
 	else if (layername.toLowerCase().indexOf("ruangan") >= 0)
 	{
         name = itemname;
-		content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/pk-assets/image-data/Ruang/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+lyr+': '+	name+'</h4></div></div>';
+		content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/Ruang/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+lyr+': '+	name+'</h4></div></div>';
     }			  
 	else {
         name = itemname;
-		content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/pk-assets/image-data/Pohon/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+name+'</h4><p> 	Deskripsi	</p></div></div>';
+		content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/Pohon/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+name+'</h4><p> 	Deskripsi	</p></div></div>';
     }*/
 	
 	//return str;
@@ -768,7 +762,7 @@ $("#search").submit(function(e) {
     if(inpuValue.length > 1) {
       $("#result").slideDown(300);
       $.ajax({
-        url: '/helper/search.php',
+        url: 'helper/search.php',
         type: 'POST',
         data: serializeData,
         success: function(response) {
@@ -777,44 +771,55 @@ $("#search").submit(function(e) {
           //searchButtonImage.attr('class', 'fa fa-times')
           var body;
           if(!results.error_status) {
-
-			// first clear any existing features in the overlay
-			featureOverlay.getSource().clear(); 
-            $.each(results, function(i, item){
-              $.each(item, function(j, value) {
-                var header = '<h5>' + capitalizeFirst(j) + '</h5>';
-                $("#result-list").append(header);
-                $.each(value, function(k, realVal) {
-                  var ext=new ol.format.GeoJSON().readFeature(realVal.geo).getGeometry().getExtent();
-                  var center = ol.extent.getCenter(ext);
-                  var lon=center[0];
-                  var lat=center[1];
-				  
-				  //add map marker here
-				  var iconFeature = new ol.Feature({
-					  geometry: new ol.geom.Point(center).transform(UTM48Sprojection,'EPSG:3857'),
-					  Nama: 'Null Island'
+			if(results.rowcount > 0)
+			{
+				// first clear any existing features in the overlay
+				featureOverlay.getSource().clear(); 
+				$.each(results, function(i, item)
+				{
+				  $.each(item, function(j, value) 
+				  {					
+					var header = '<h5>' + capitalizeFirst(j) + '</h5>';
+					$("#result-list").append(header);
+					$.each(value, function(k, realVal) 
+					{
+					
+					  var ext=new ol.format.GeoJSON().readFeature(realVal.geo).getGeometry().getExtent();
+					  var center = ol.extent.getCenter(ext);
+					  var lon=center[0];
+					  var lat=center[1];
+					  
+					  //add map marker here
+					  var iconFeature = new ol.Feature({
+						  geometry: new ol.geom.Point(center).transform(UTM48Sprojection,'EPSG:3857'),
+						  Nama: 'Null Island'
+					  });
+					  if(capitalizeFirst(j)=='Gedung') {iconFeature.setStyle(iconStyleBuilding);} else
+						  {iconFeature.setStyle(iconStyleRoomEntrance);}
+					 // feature.getGeometry().transform(UTM48Sprojection,'EPSG:3857');
+					  featureOverlay.getSource().addFeature(iconFeature);
+					  
+					  var geom=new ol.format.GeoJSON().readFeature(realVal.geo).getGeometry();
+					  var format = new ol.format.WKT();
+					  console.log(center);
+					  
+					  var wkt = format.writeGeometry(geom);
+					  console.log(realVal);
+					  var namaItem = (realVal.Name) ? realVal.Name : realVal.NamaRuang;
+					  var idItem = realVal.Id;
+					  body = '<li style="padding: 5px;" onClick="CenterMapGeometry(\'' + wkt + '\'' + ',' + '\'' + namaItem + '\''+ ',' + '\'' + capitalizeFirst(j) + '\')"><img style="margin-right: 10px;" src="/pk-assets/images/office-block.svg" class="img-responsive pull-left" width="20px">'+ namaItem + '</li><hr>';
+					  $("#result-list").append(body);
+					  $("#loading-spinner").hide();
+				//	  $("#clear-search").show();
+					})
 				  });
-				  if(capitalizeFirst(j)=='Gedung') {iconFeature.setStyle(iconStyleBuilding);} else
-					  {iconFeature.setStyle(iconStyleRoomEntrance);}
-				 // feature.getGeometry().transform(UTM48Sprojection,'EPSG:3857');
-				  featureOverlay.getSource().addFeature(iconFeature);
-				  
-                  var geom=new ol.format.GeoJSON().readFeature(realVal.geo).getGeometry();
-                  var format = new ol.format.WKT();
-				  console.log(center);
-				  
-                  var wkt = format.writeGeometry(geom);
-				  console.log(realVal);
-                  var namaItem = (realVal.Name) ? realVal.Name : realVal.NamaRuang;
-				  var idItem = realVal.Id;
-                  body = '<li style="padding: 5px;" onClick="CenterMapGeometry(\'' + wkt + '\'' + ',' + '\'' + namaItem + '\''+ ',' + '\'' + capitalizeFirst(j) + '\')"><img style="margin-right: 10px;" src="/pk-assets/images/office-block.svg" class="img-responsive pull-left" width="20px">'+ namaItem + '</li><hr>';
-                  $("#result-list").append(body);
-				  $("#loading-spinner").hide();
-			//	  $("#clear-search").show();
-                })
-              });
-            })
+				})
+			}
+			else
+			{
+				$("#loading-spinner").hide();
+				$("#result-list").append("<p><span style='padding-left:15px;margin-top:15px;'>Data tidak ditemukan</span></p>");
+			}
           } else {
             body = '<p>'+ results.error +'</p>';
             $("#result-list").append(body);
@@ -1022,6 +1027,7 @@ $("#search").submit(function(e) {
 	var citydbname = 'petakampusitb';
 	
 	var buildings=[];
+	var lod=4;
 	var lod=4;
 	
 	 $.post('helper/requestdata.php?request=2',{lod:lod},function(dbbuilding){
