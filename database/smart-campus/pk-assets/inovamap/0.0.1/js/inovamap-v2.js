@@ -571,7 +571,7 @@ var iconStyleBuilding = new ol.style.Style({
     anchorXUnits: 'fraction',
     anchorYUnits: 'pixels',
     opacity: 0.75,
-    src: '/petakampus/pk-assets/images/mapmarker/office-building.png'
+    src: '/pk-assets/images/mapmarker/office-building.png'
   }))
 });
 
@@ -581,7 +581,7 @@ var iconStyleRoomEntrance = new ol.style.Style({
     anchorXUnits: 'fraction',
     anchorYUnits: 'pixels',
     opacity: 0.75,
-    src: '/petakampus/pk-assets/images/mapmarker/entrance.png'
+    src: '/pk-assets/images/mapmarker/entrance.png'
   }))
 });
 

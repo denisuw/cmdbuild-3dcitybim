@@ -430,18 +430,24 @@ function getInfo(layer, evt) {
 				
               if (id.toLowerCase().indexOf("gedung") >= 0){
                 name = feature.properties.Name;
-              } else if (id.toLowerCase().indexOf("jalan") >= 0){
-                name = feature.id;
+				content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/pk-assets/image-data/Gedung/'+feature.properties.img_url+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+name+'</h4></div></div>';
+         //     } else if (id.toLowerCase().indexOf("jalan") >= 0){
+         //       name = feature.id;
               }
 			  else if (id.toLowerCase().indexOf("ruangan") >= 0)
 			  {
                 name = feature.properties.NamaRuang;
 				namaLantai = feature.properties.NamaLantai;
 				namaGedung = feature.properties.NamaGedung;
+				content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/pk-assets/image-data/Ruang/'+feature.properties.img_url+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">Ruang: '+name+'</h4><p>Lantai: '+namaLantai +'<br>Gedung: '+namaGedung +'</p></div></div>';
               }			  
 			  else {
                 name = feature.id;
-              }
+				content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/pk-assets/image-data/Pohon/'+feature.properties.img_url+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+name+'</h4><p> 	Deskripsi	</p></div></div>';
+                //content.innerHTML = '<p>Nama : ' + name + '<br/>Link Foto <br/>Foto Object<br/><img src="http://localhost:8082/pk-assets/image-data/Pohon/'+feature.properties.img_url+'" alt="Mountain View" style="width:100px;height:100px;"></p>';
+				namaLantai = feature.properties.NamaLantai;
+				namaGedung = feature.properties.NamaGedung;
+              }			  
 			  
 			  getPopupContent(id, name, feature.properties.img_url , namaLantai,namaGedung);
               popUpOver.setPosition(coord);		  
@@ -714,11 +720,11 @@ function getPopupContent(layername, itemname, imgurl , namaLantai = null,namaGed
 	lyr = lyr[0];
 	
 	name = itemname;
-	content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/'+lyr+'/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+lyr+': '+	name+'</h4></div></div>';
+	content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/pk-assets/image-data/'+lyr+'/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+lyr+': '+	name+'</h4></div></div>';
 		
 	/*if (layername.toLowerCase().indexOf("gedung") >= 0){
         name = itemname;
-		content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/Gedung/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+lyr+': '+name+'</h4></div></div>';
+		content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/pk-assets/image-data/Gedung/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+lyr+': '+name+'</h4></div></div>';
     } else if (layername.toLowerCase().indexOf("jalan") >= 0){
       name = itemname;
       content.innerHTML = '<p>Nama Jalan : '+ name +'</p>';
@@ -726,11 +732,11 @@ function getPopupContent(layername, itemname, imgurl , namaLantai = null,namaGed
 	else if (layername.toLowerCase().indexOf("ruangan") >= 0)
 	{
         name = itemname;
-		content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/Ruang/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+lyr+': '+	name+'</h4></div></div>';
+		content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/pk-assets/image-data/Ruang/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+lyr+': '+	name+'</h4></div></div>';
     }			  
 	else {
         name = itemname;
-		content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/Pohon/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+name+'</h4><p> 	Deskripsi	</p></div></div>';
+		content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/pk-assets/image-data/Pohon/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+name+'</h4><p> 	Deskripsi	</p></div></div>';
     }*/
 	
 	//return str;

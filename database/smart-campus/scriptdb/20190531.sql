@@ -1,6 +1,6 @@
-﻿DROP VIEW public.view_building_room_geom;
-CREATE OR REPLACE VIEW public.view_building_room_geom AS
-select D."Name" as "NamaGedung",C."Name" as "NamaLantai",B."Description" as "NamaRuang", A."Master" as "RuangId",A."Geometry",
+﻿DROP VIEW gis.view_building_room_geom;
+CREATE OR REPLACE VIEW gis.view_building_room_geom AS
+select D."Name" as "NamaGedung",C."Name" as "NamaLantai",B."Code" as "Code",B."Description" as "NamaRuang", A."Master" as "RuangId",A."Geometry",
 case when C."Name" = 'Basement' then -1 
 when C."Name" = 'Basement 2' then -2 
 when C."Name" = 'Lantai 1' then '0' 
@@ -17,8 +17,8 @@ join public."Room" B on A."Master" = B."Id"
 join public."Floor" C on B."Floor" = C."Id"
 join public."Building" D on C."Building" = D."Id" 
 
-DROP VIEW public.view_floor_distinct_get;
-CREATE OR REPLACE VIEW public.view_floor_distinct_get AS
+DROP VIEW gis.view_floor_distinct_get;
+CREATE OR REPLACE VIEW gis.view_floor_distinct_get AS
 select 
 case when "Name" = 'Basement' then -1 
 when "Name" = 'Basement 2' then -2 
