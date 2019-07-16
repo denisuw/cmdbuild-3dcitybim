@@ -19,7 +19,7 @@
 			   
 				//echo $NamaTable;
 				
-				$sql1 =  'SELECT a."Id", a."Name", ST_AsGeoJson(ST_centroid(b."Geometry")) AS geo FROM "'.$NamaTable.'" a JOIN "Detail_'.$NamaTable.'_the_geom" b ON a."Id" = b."Master" WHERE LOWER (a."Name") LIKE ';
+				$sql1 =  'SELECT a."Id", a."Name", ST_AsGeoJson(ST_centroid(b."Geometry")) AS geo,ST_AsGeoJSON(b."Geometry") AS geom FROM "'.$NamaTable.'" a JOIN "Detail_'.$NamaTable.'_the_geom" b ON a."Id" = b."Master" WHERE LOWER (a."Name") LIKE ';
 				
 				$sql2 = "'%{$name}%'";
 				

@@ -4,6 +4,7 @@ $("[class='checkbox']").bootstrapSwitch();
 $("#filter").hide();
 document.getElementById("map3d").style.visibility = "hidden";
 
+
 $(function(){ 
 
 //Variables
@@ -77,6 +78,7 @@ var container = document.getElementById('popup');
 var content = document.getElementById('popup-content');
 var closer = document.getElementById('popup-closer');
 var divLayerMenu = document.getElementById('divLayerMenu');
+var selectedLayerArray = [];
  var popUpOver = new ol.Overlay(({
         element: container,
         autoPan: true,
@@ -118,6 +120,25 @@ var view = new ol.View({
 backgroundLayers.push(raster, raster2);
 var source = new ol.source.Vector();
 
+ var selectedstyle=new ol.style.Style({
+             fill: new ol.style.Fill({
+             color: '#fdff00'
+              }),
+             stroke: new ol.style.Stroke({
+              color: '#ffb400',
+              width: 3
+              })
+             });
+
+	var sourceSelected = new ol.source.Vector({
+        features: []
+      });
+	  
+     var layerSelected = new ol.layer.Vector({
+        source: source,
+        style: selectedstyle
+      });      
+		  
 var vector = new ol.layer.Vector({
   source: source,
   style: new ol.style.Style({
@@ -150,12 +171,12 @@ $.ajax({
 			lantai.push(item.id_lantai);
     });
 	
-	console.log(lantai);
+	//console.log(lantai);
 	maxLantai = getMaxOfArray(lantai);
 	minLantai = getMinOfArray(lantai);
 	
-	console.log(maxLantai);
-	console.log(minLantai);
+	//console.log(maxLantai);
+	//console.log(minLantai);
   },
   error:function(err){
     console.log(err);
@@ -229,6 +250,8 @@ $.ajax({
   url: 'helper/basemap-get.php',
   type: 'GET',
   success: function(response) {
+    	   console.log('bb');
+
     var json = $.parseJSON(response);
     json.data.forEach(function(item) {
 	
@@ -275,7 +298,7 @@ $.ajax({
             });
 		//	overlay.setZIndex(999);
             overlayLayers.push(overlay);
-			
+			//console.log(overlay.getProperties());
 			//console.log(overlay);
           }
         }
@@ -308,7 +331,7 @@ $.ajax({
 		for (i = 0; i < li.length; i++) {
 		  li[i].addEventListener("change", function() {
 			var objLayer = getLayerByName(this.value,overlayLayers);
-			console.log(objLayer);
+			//console.log(objLayer);
 			if(objLayer != null)
 			{
 				if(this.checked) {
@@ -369,17 +392,26 @@ var layersGroupDB=[
  closer.onclick = function() {
   popUpOver.setPosition(undefined);
   closer.blur();
+  map.removeLayer(layerSelected);
+  featureOverlay.getSource().clear(); 
   return false;
 };
 
+$("#resetButton").click(function() {
+  popUpOver.setPosition(undefined);
+  closer.blur();
+		  map.removeLayer(layerSelected);
+		  featureOverlay.getSource().clear(); 
+       });
+
 function getLayerByName(layerName, arrLayer)
 {
-console.log(arrLayer);
-console.log(layerName);
+//console.log(arrLayer);
+//console.log(layerName);
 
 	for(var i = 0;i<arrLayer.length;i++)
 	{
-	console.log(arrLayer[i].get('name'));
+	//console.log(arrLayer[i].get('name'));
 		if (arrLayer[i].get('name') == layerName)
 		{
 			return arrLayer[i];
@@ -421,9 +453,9 @@ function getInfo(layer, evt) {
 			//alert(coord);
             response.features.forEach(function(feature){
               id = feature.id;
-              console.log(feature);
-			  console.log(id);
-			  console.log(feature.properties.img_url);
+             // console.log(feature);
+			  //console.log(id);
+			  //console.log(feature.properties.img_url);
 			  
 			  var namaLantai = "";
 			  var namaGedung = "";
@@ -496,11 +528,11 @@ var scenenew = ol3dnew.getCesiumScene();
   
   var highlightStyle = new ol.style.Style({
 	stroke: new ol.style.Stroke({
-	  color: [255,0,0,0.6],
+	  color: [247,255,0,0.6],
 	  width: 2
 	}),
 	fill: new ol.style.Fill({
-	  color: [255,0,0,0.6]
+	  color: [251,255,92,95]
 	}),
 	zIndex: 1
   });
@@ -673,7 +705,7 @@ var line = null;
 }
 
 
-window.CenterMapGeometry =  function (wkt, name, header) {
+window.CenterMapGeometry =  function (wkt, name, header, id) {
   var feature = new ol.format.WKT().readFeature(wkt);
   var buildingList = $("#result-list li");
   for (var i = buildingList.length - 1; i >= 0; i--) {
@@ -691,8 +723,21 @@ window.CenterMapGeometry =  function (wkt, name, header) {
 	var center = ol.extent.getCenter(ext);
 	var lon=center[0];
 	var lat=center[1];
-	//console.log(center);
-	console.log(header);
+
+	var objArr = findInSelectedLayerArray(id);
+	 
+	//console.log(objArr);
+	sourceSelected.clear();
+    sourceSelected.addFeature(objArr);
+		 layerSelected = new ol.layer.Vector({
+        source: sourceSelected,
+        style: selectedstyle
+      });   
+	 map.addLayer(layerSelected);
+	//console.log(objArr);
+	//console.log(source.getFeatures());
+    
+	//console.log(feature.getFill());
 	//search by properties Id
 	//var ruang = getLayerByName("Ruangan",overlayLayers);
 	//console.log(overlayLayers);
@@ -701,11 +746,33 @@ window.CenterMapGeometry =  function (wkt, name, header) {
 	popUpOver.setPosition(center);
    map.getView().setCenter([lon, lat]);	
   
-  map.getView().setZoom(19);
-  	
+  if(header == "Gedung")
+  {
+	map.getView().setZoom(17);
+  }
+  else if (header == "Ruangan")
+  {
+	map.getView().setZoom(19);
+  }
+  else
+  {
+	map.getView().setZoom(19);
+  }
 
 }
 
+function findInSelectedLayerArray(id)
+{
+	for(var i = 0;i<selectedLayerArray.length;i++)
+	{
+		if(selectedLayerArray[i].Id == id)
+		{
+			return selectedLayerArray[i].data;
+		}
+	}
+	
+	return "";
+}
 function getPopupContent(layername, itemname, imgurl , namaLantai = null,namaGedung = null)
 {
 	//var name = "";
@@ -766,6 +833,7 @@ $("#search").submit(function(e) {
         type: 'POST',
         data: serializeData,
         success: function(response) {
+		selectedLayerArray = [];		
           var results = $.parseJSON(response); 
           // console.log(results);
           //searchButtonImage.attr('class', 'fa fa-times')
@@ -773,6 +841,7 @@ $("#search").submit(function(e) {
           if(!results.error_status) {
 			if(results.rowcount > 0)
 			{
+				 map.removeLayer(layerSelected);				 
 				// first clear any existing features in the overlay
 				featureOverlay.getSource().clear(); 
 				$.each(results, function(i, item)
@@ -785,6 +854,9 @@ $("#search").submit(function(e) {
 					{
 					
 					  var ext=new ol.format.GeoJSON().readFeature(realVal.geo).getGeometry().getExtent();
+					  //console.log(realVal.geo);
+					  //console.log(new ol.format.GeoJSON().readFeature(realVal.geo));
+					  //console.log();
 					  var center = ol.extent.getCenter(ext);
 					  var lon=center[0];
 					  var lat=center[1];
@@ -801,13 +873,21 @@ $("#search").submit(function(e) {
 					  
 					  var geom=new ol.format.GeoJSON().readFeature(realVal.geo).getGeometry();
 					  var format = new ol.format.WKT();
-					  console.log(center);
+					  //console.log(center);
 					  
+					 /*add selected geom to array*/
+					 var obj = {};
+					 obj.Id = realVal.Id;
+					 obj.data = new ol.format.GeoJSON().readFeature(realVal.geom);
+					 
+					 selectedLayerArray.push(obj);					 
+					/* end of add selected geom to array */
+				
 					  var wkt = format.writeGeometry(geom);
 					  console.log(realVal);
 					  var namaItem = (realVal.Name) ? realVal.Name : realVal.NamaRuang;
 					  var idItem = realVal.Id;
-					  body = '<li style="padding: 5px;" onClick="CenterMapGeometry(\'' + wkt + '\'' + ',' + '\'' + namaItem + '\''+ ',' + '\'' + capitalizeFirst(j) + '\')"><img style="margin-right: 10px;" src="/pk-assets/images/office-block.svg" class="img-responsive pull-left" width="20px">'+ namaItem + '</li><hr>';
+					  body = '<li style="padding: 5px;" onClick="CenterMapGeometry(\'' + wkt + '\'' + ',' + '\'' + namaItem + '\''+ ',' + '\'' + capitalizeFirst(j) + '\',\'' + idItem + '\')"><img style="margin-right: 10px;" src="/pk-assets/images/office-block.svg" class="img-responsive pull-left" width="20px">'+ namaItem + '</li><hr>';
 					  $("#result-list").append(body);
 					  $("#loading-spinner").hide();
 				//	  $("#clear-search").show();
@@ -864,7 +944,7 @@ $("#search").submit(function(e) {
   });
 
   $("#button-up").click(function(e) {
-  console.log(activeNumber);
+ // console.log(activeNumber);
     if(activeNumber < maxLantai) 
 	{
       activeNumber++;
@@ -888,7 +968,7 @@ $("#search").submit(function(e) {
 				{
 					val = "B"+(val*-1);
 				}
-				console.log("val:"+val+" "+isActive);
+				//console.log("val:"+val+" "+isActive);
 			  var body = '<li class="'+ isActive +'">' + val + '</li>';
 			  $("#level-list").append(body);  		  
 				  if (index==0) SelectLantai(lantai[1]);
@@ -896,7 +976,7 @@ $("#search").submit(function(e) {
 		}
       });
       var cql = "id_lantai = "+ activeNumber +"";
-      console.log(cql);
+     // console.log(cql);
       map.getLayers().forEach(function(layer){
         layer.getLayers().forEach(function(lyr){
           if(lyr.get('name') == 'Ruangan') {
@@ -908,10 +988,10 @@ $("#search").submit(function(e) {
     }
   });
   $("#button-down").click(function(e) {
-   console.log(lantai);
+  // console.log(lantai);
     if(activeNumber > minLantai) {
       activeNumber--;
-      console.log(lantai[2]);
+    //  console.log(lantai[2]);
       //lantai = lantai.map(function(val){return --val;});
       $("#level-list").html('');
       $.each(lantai, function(index, val) {
@@ -934,7 +1014,7 @@ $("#search").submit(function(e) {
 		}
       });
       var cql = "id_lantai = "+ activeNumber +"";
-	  console.log(cql);
+	 // console.log(cql);
       map.getLayers().forEach(function(layer){
         layer.getLayers().forEach(function(lyr){
           if(lyr.get('name') == 'Ruangan') {
@@ -1020,7 +1100,7 @@ $("#search").submit(function(e) {
   
   function getBuildingData()
   {  	
-//alert('aaa');
+    //alert('aaa');
 	var getbuilding;
 	//var buildingid=[];
 	var buildingid=[];
@@ -1033,11 +1113,11 @@ $("#search").submit(function(e) {
 	 $.post('helper/requestdata.php?request=2',{lod:lod},function(dbbuilding){
 
            var parsed = JSON.parse(dbbuilding);          
-
+			
            for(var x in parsed){
-                buildings.push(parsed[x]);
-                
+                buildings.push(parsed[x]);                
         	    getbuilding = JSON.parse(buildings[x]);
+				//console.log(getbuilding);
         	    buildingid.push(getbuilding.crs.properties.building);
                 
                 
@@ -1059,12 +1139,14 @@ $("#search").submit(function(e) {
              })
              });
             
-			console.log(defaultstyle);
+			//console.log(defaultstyle);
              for(var i=0;i<buildings.length;i++)
              {
+			 //console.log(buildings[i]);
              	var vectorsource = new ol.source.Vector();
              
                  var geojsonFormat = new ol.format.GeoJSON();
+				 //console.log(buildings[i]);
                 var features = geojsonFormat.readFeatures(buildings[i],
                    {featureProjection: 'EPSG:3857'});
                    vectorsource.addFeatures(features);
@@ -1460,3 +1542,8 @@ $("#filter-toggle").on('click', function(e) {
 	$('#filter').slideToggle(500);
 });
 
+
+$(document).ready(function() {
+       
+      });
+	  

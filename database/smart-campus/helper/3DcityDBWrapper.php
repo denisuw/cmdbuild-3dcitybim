@@ -144,7 +144,7 @@ var $Schema='';
 		           }		
         else if($lod==4){
 		
-			     $sql=' SELECT ts.building_id, ST_AsGeoJSON(ST_Collect(ST_Transform(sg.geometry,4326))) as geometry FROM "'. $this->Schema.'"."surface_geometry" sg, "'. $this->Schema.'"."thematic_surface" ts WHERE ts.lod4_multi_surface_id=sg.root_id AND ts.building_id is not NULL group by ts.building_id order by ts.building_id limit 50';	
+			     $sql=' SELECT ts.building_id, ST_AsGeoJSON(ST_Collect(ST_Transform(sg.geometry,4326))) as geometry FROM "'. $this->Schema.'"."surface_geometry" sg, "'. $this->Schema.'"."thematic_surface" ts WHERE ts.lod4_multi_surface_id=sg.root_id AND ts.building_id is not NULL group by ts.building_id order by ts.building_id limit 5';	
 		           }	
 		    $result=pg_query($dbconn3, $sql);  
 			if (!$result) {

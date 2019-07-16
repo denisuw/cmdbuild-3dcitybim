@@ -62,10 +62,7 @@
 		  $("#search-button").show();
 		  
 		  var container = $("#result");
-
           container.slideUp(300);
-
-		  featureOverlay.getSource().clear(); 
        });
       });
 	  
