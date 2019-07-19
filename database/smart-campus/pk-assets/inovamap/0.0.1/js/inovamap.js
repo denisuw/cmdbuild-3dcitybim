@@ -79,6 +79,12 @@ var content = document.getElementById('popup-content');
 var closer = document.getElementById('popup-closer');
 var divLayerMenu = document.getElementById('divLayerMenu');
 var selectedLayerArray = [];
+var citydbname = 'petakampusitb';
+var lod=4;
+var getbuilding;
+var buildingid=[];
+var buildings=[];
+	
  var popUpOver = new ol.Overlay(({
         element: container,
         autoPan: true,
@@ -1169,6 +1175,11 @@ $("#search").submit(function(e) {
     switch(value) {
       case 'mode-2d':
         ol3d.setEnabled(false);
+		var arrMapLayer = getLayerByTitle(citydbname);
+		for(var i = 0;i<arrMapLayer.length;i++)
+		{
+			map.removeLayer(arrMapLayer[i]);
+		}
       break;
 
       case 'mode-3d':
@@ -1189,29 +1200,26 @@ $("#search").submit(function(e) {
   
   function getBuildingData()
   {  	
-    //alert('aaa');
-	var getbuilding;
-	//var buildingid=[];
-	var buildingid=[];
-	var citydbname = 'petakampusitb';
-	
-	var buildings=[];
-	var lod=4;
-	var lod=4;
-	
+	//buildingid=[];
+	//buildings=[];
+	console.log(buildingid);
+	console.log(buildingid.length);
+	if(buildingid.length == 0)
+	{
 	 $.post('helper/requestdata.php?request=2',{lod:lod},function(dbbuilding){
-
            var parsed = JSON.parse(dbbuilding);          
 			
            for(var x in parsed){
                 buildings.push(parsed[x]);                
         	    getbuilding = JSON.parse(buildings[x]);
 				//console.log(getbuilding);
-        	    buildingid.push(getbuilding.crs.properties.building);
-                
-                
+        	    buildingid.push(getbuilding.crs.properties.building);              
               }
-            var checking=true; 
+             
+      	 });
+	}	 
+		 
+	var checking=true; 
             var defaultstyle=new ol.style.Style({
              fill: new ol.style.Fill({
              color: '#ffcc33'
@@ -1251,8 +1259,7 @@ $("#search").submit(function(e) {
                 setTimeout(function() {
                         map.getView().fit(json.getSource().getExtent(), map.getSize());
                        }, 200);                
-                }               
-      	 });
+                }            
   }
   
   $("#sidebyside").click(function(e) {   
@@ -1622,6 +1629,18 @@ function marker(obj) {
 }
 
 
+function getLayerByTitle(title)
+{
+	var arrObj = [];
+	map.getLayers().forEach(function(layer){
+			if(layer.getProperties().title.indexOf(title) !== -1 )
+			{
+				arrObj.push(layer);
+			}
+		});
+		
+	return arrObj;
+}
 
 
 	  
