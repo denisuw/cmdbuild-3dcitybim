@@ -848,8 +848,14 @@ function getPopupContent(layername, itemname, imgurl , namaLantai = null,namaGed
 	lyr = lyr[0];
 	
 	name = itemname;
-	content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/'+lyr+'/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+lyr+': '+	name+'</h4></div></div>';
-		
+	if(typeof imgurl !== 'undefined' && imgurl != "")
+	{
+		content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/'+lyr+'/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+lyr+': '+	name+'</h4></div></div>';
+	}
+	else
+	{
+		content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/images/no-image-icon.png" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+lyr+': '+	name+'</h4></div></div>';
+	}
 	/*if (layername.toLowerCase().indexOf("gedung") >= 0){
         name = itemname;
 		content.innerHTML = '<div class="media"><a href="#" class="pull-left"><img src="/petakampus/pk-assets/image-data/Gedung/'+imgurl+'" class="media-object" style="width:100px;height:100px; alt="'+name+'"></a><div class="media-body"><h4 class="media-heading">'+lyr+': '+name+'</h4></div></div>';
