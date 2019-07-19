@@ -392,7 +392,17 @@ var layersGroupDB=[
  closer.onclick = function() {
   popUpOver.setPosition(undefined);
   closer.blur();
-  map.removeLayer(layerSelected);
+  
+  	map.getLayers().forEach(function(layer){
+		//console.log(layer);
+        console.log(layer.getProperties());
+			if(layer.getProperties().title == "layerselection")
+			{
+				map.removeLayer(layerSelected);
+			}
+		});
+		
+  
   featureOverlay.getSource().clear(); 
   return false;
 };
@@ -400,7 +410,14 @@ var layersGroupDB=[
 $("#resetButton").click(function() {
   popUpOver.setPosition(undefined);
   closer.blur();
-		  map.removeLayer(layerSelected);
+		  map.getLayers().forEach(function(layer){
+		//console.log(layer);
+        console.log(layer.getProperties());
+			if(layer.getProperties().title == "layerselection")
+			{
+				map.removeLayer(layerSelected);
+			}
+		});
 		  featureOverlay.getSource().clear(); 
        });
 
@@ -725,13 +742,15 @@ window.CenterMapGeometry =  function (wkt, name, header, id) {
 	var lat=center[1];
 
 	var objArr = findInSelectedLayerArray(id);
-	 
+	var nolantai = objArr.NamaLantai;
+	console.log(nolantai);
 	//console.log(objArr);
 	sourceSelected.clear();
-    sourceSelected.addFeature(objArr);
+    sourceSelected.addFeature(objArr.data);
 		 layerSelected = new ol.layer.Vector({
         source: sourceSelected,
-        style: selectedstyle
+        style: selectedstyle,
+		title: "layerselection"
       });   
 	 map.addLayer(layerSelected);
 	//console.log(objArr);
@@ -752,7 +771,55 @@ window.CenterMapGeometry =  function (wkt, name, header, id) {
   }
   else if (header == "Ruangan")
   {
+	/*map.getLayers().forEach(function(layer){
+		console.log(layer);
+        console.log(layer.getProperties());		
+		});*/
 	map.getView().setZoom(19);
+	if(nolantai < maxLantai && nolantai > minLantai)
+	{
+	  activeNumber = nolantai;
+      $("#level-list").html('');
+	  //console.log(lantai);
+      $.each(lantai, function(index, val) 
+	  {
+		//console.log("val:"+val);
+		//console.log("index:"+index);
+		if(val == activeNumber ||  val == (activeNumber+ 1) || val == (activeNumber- 1))
+		{
+			if(val <= maxLantai) 
+			{
+			  isActive = activeNumber == val ? 'active' : '';
+			  if(val >= 0)
+				{
+					val = "L"+(val+1);
+				}
+				else
+				{
+					val = "B"+(val*-1);
+				}
+				//console.log("val:"+val+" "+isActive);
+			  var body = '<li class="'+ isActive +'">' + val + '</li>';
+			  $("#level-list").append(body);  		  
+				  if (index==0) SelectLantai(lantai[1]);
+			}		
+		}
+      });
+      var cql = "id_lantai = "+ activeNumber +"";
+     // console.log(cql);
+      map.getLayers().forEach(function(layer){
+	  if(layer.getProperties().title != "layerselection")
+	  {
+			layer.getLayers().forEach(function(lyr){
+			  if(lyr.get('name') == 'Ruangan') {
+				lyr.getSource().updateParams({"CQL_FILTER": cql});
+				lyr.getSource().refresh({force: true});  
+			  }
+			})     
+		}
+      });  
+	}	
+		  
   }
   else
   {
@@ -767,7 +834,7 @@ function findInSelectedLayerArray(id)
 	{
 		if(selectedLayerArray[i].Id == id)
 		{
-			return selectedLayerArray[i].data;
+			return selectedLayerArray[i];
 		}
 	}
 	
@@ -841,7 +908,14 @@ $("#search").submit(function(e) {
           if(!results.error_status) {
 			if(results.rowcount > 0)
 			{
-				 map.removeLayer(layerSelected);				 
+				 map.getLayers().forEach(function(layer){
+				//console.log(layer);
+				console.log(layer.getProperties());
+					if(layer.getProperties().title == "layerselection")
+					{
+						map.removeLayer(layerSelected);
+					}
+				});				 
 				// first clear any existing features in the overlay
 				featureOverlay.getSource().clear(); 
 				$.each(results, function(i, item)
@@ -874,12 +948,14 @@ $("#search").submit(function(e) {
 					  var geom=new ol.format.GeoJSON().readFeature(realVal.geo).getGeometry();
 					  var format = new ol.format.WKT();
 					  //console.log(center);
+					  var NamaLantaiObj = realVal.namalantai;
 					  
 					 /*add selected geom to array*/
 					 var obj = {};
 					 obj.Id = realVal.Id;
 					 obj.data = new ol.format.GeoJSON().readFeature(realVal.geom);
-					 
+					 obj.NamaLantai = NamaLantaiObj;					 
+					 console.log(obj);
 					 selectedLayerArray.push(obj);					 
 					/* end of add selected geom to array */
 				
@@ -944,7 +1020,6 @@ $("#search").submit(function(e) {
   });
 
   $("#button-up").click(function(e) {
- // console.log(activeNumber);
     if(activeNumber < maxLantai) 
 	{
       activeNumber++;
@@ -978,17 +1053,21 @@ $("#search").submit(function(e) {
       var cql = "id_lantai = "+ activeNumber +"";
      // console.log(cql);
       map.getLayers().forEach(function(layer){
-        layer.getLayers().forEach(function(lyr){
-          if(lyr.get('name') == 'Ruangan') {
-            lyr.getSource().updateParams({"CQL_FILTER": cql});
-            lyr.getSource().refresh({force: true});  
-          }
-        })     
+        if(layer.getProperties().title != "layerselection")
+		  {
+				layer.getLayers().forEach(function(lyr){
+				  if(lyr.get('name') == 'Ruangan') {
+					lyr.getSource().updateParams({"CQL_FILTER": cql});
+					lyr.getSource().refresh({force: true});  
+				  }
+				})     
+			}    
       });   
     }
   });
   $("#button-down").click(function(e) {
   // console.log(lantai);
+  	//console.log(activeNumber);
     if(activeNumber > minLantai) {
       activeNumber--;
     //  console.log(lantai[2]);
@@ -1016,14 +1095,18 @@ $("#search").submit(function(e) {
       var cql = "id_lantai = "+ activeNumber +"";
 	 // console.log(cql);
       map.getLayers().forEach(function(layer){
-        layer.getLayers().forEach(function(lyr){
-          if(lyr.get('name') == 'Ruangan') {
-            lyr.getSource().updateParams({"CQL_FILTER": cql});
-            lyr.getSource().refresh({force: true});  
-          }
-        })     
+        if(layer.getProperties().title != "layerselection")
+		  {
+				layer.getLayers().forEach(function(lyr){
+				  if(lyr.get('name') == 'Ruangan') {
+					lyr.getSource().updateParams({"CQL_FILTER": cql});
+					lyr.getSource().refresh({force: true});  
+				  }
+				})     
+			}     
       });   
-    }	
+    }
+
   });
 
   $("#clear").on('click', function(e) {   
