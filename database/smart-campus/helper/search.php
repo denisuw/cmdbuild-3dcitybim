@@ -20,6 +20,7 @@
 			$querybase = $pdo->prepare("SELECT * FROM basemap where table_name != '' ORDER BY sequence");
 			$querybase->execute();
 			$nmlntai = -99;
+			$panourl = "'none'";
 			$rowbase = $querybase->fetchAll();
 			
 			$cnt = 0;
@@ -29,7 +30,7 @@
 			   
 				//echo $NamaTable;
 				
-				$sql1 =  'SELECT a."Id", a."Name", ST_AsGeoJson(ST_centroid(b."Geometry")) AS geo,ST_AsGeoJSON(b."Geometry") AS geom, '.$nmlntai.' as NamaLantai FROM "'.$NamaTable.'" a JOIN "Detail_'.$NamaTable.'_the_geom" b ON a."Id" = b."Master" WHERE LOWER (a."Name") LIKE ';
+				$sql1 =  'SELECT a."Id", a."Name", ST_AsGeoJson(ST_centroid(b."Geometry")) AS geo,ST_AsGeoJSON(b."Geometry") AS geom, '.$nmlntai.' as NamaLantai,'.$panourl.' as PanoUrl FROM "'.$NamaTable.'" a JOIN "Detail_'.$NamaTable.'_the_geom" b ON a."Id" = b."Master" WHERE LOWER (a."Name") LIKE ';
 				
 				
 				if($NamaTable == "Room")
@@ -46,7 +47,7 @@
 								' WHEN LOWER(c."Name")::text = '.$lt7.'::text THEN 6'.
 								' WHEN LOWER(c."Name")::text = '.$lt8.'::text THEN 7'.
 								' ELSE 0'.
-								' END AS NamaLantai FROM "'.$NamaTable.'" a JOIN "Detail_'.$NamaTable.'_the_geom" b ON a."Id" = b."Master" JOIN "Floor" c ON a."Floor" = c."Id" WHERE LOWER (a."Name") LIKE ';
+								' END AS NamaLantai, a."PanoUrl" FROM "'.$NamaTable.'" a JOIN "Detail_'.$NamaTable.'_the_geom" b ON a."Id" = b."Master" JOIN "Floor" c ON a."Floor" = c."Id" WHERE LOWER (a."Name") LIKE ';
 				}
 				$sql2 = "'%{$name}%'";
 				

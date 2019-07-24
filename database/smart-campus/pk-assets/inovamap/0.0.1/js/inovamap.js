@@ -408,6 +408,8 @@ var layersGroupDB=[
 			}
 		});
 		
+	$("#panorama").hide();
+		
   
   featureOverlay.getSource().clear(); 
   return false;
@@ -424,6 +426,8 @@ $("#resetButton").click(function() {
 				map.removeLayer(layerSelected);
 			}
 		});
+		
+		$("#panorama").hide();
 		  featureOverlay.getSource().clear(); 
        });
 
@@ -482,6 +486,7 @@ function getInfo(layer, evt) {
 			  
 			  var namaLantai = "";
 			  var namaGedung = "";
+			  var panourl = "";
 				
               if (id.toLowerCase().indexOf("gedung") >= 0){
                 name = feature.properties.Name;
@@ -493,12 +498,19 @@ function getInfo(layer, evt) {
                 name = feature.properties.NamaRuang;
 				namaLantai = feature.properties.NamaLantai;
 				namaGedung = feature.properties.NamaGedung;
-              }			  
+				panourl = feature.properties.PanoUrl;
+              }		
+				else if (id.toLowerCase().indexOf("panorama") >= 0)
+			  {
+                name = feature.id;
+				panourl = feature.properties.PanoUrl;
+              }					  
 			  else {
                 name = feature.id;
               }
 			  
-			  getPopupContent(id, name, feature.properties.img_url , namaLantai,namaGedung);
+			  map.removeLayer(layerSelected);
+			  getPopupContent(id, name, feature.properties.img_url , namaLantai,namaGedung,panourl);
               popUpOver.setPosition(coord);		  
             });
         }
@@ -728,7 +740,7 @@ var line = null;
 }
 
 
-window.CenterMapGeometry =  function (wkt, name, header, id) {
+window.CenterMapGeometry =  function (wkt, name, header, id,panourl) {
   var feature = new ol.format.WKT().readFeature(wkt);
   var buildingList = $("#result-list li");
   for (var i = buildingList.length - 1; i >= 0; i--) {
@@ -766,7 +778,7 @@ window.CenterMapGeometry =  function (wkt, name, header, id) {
 	//search by properties Id
 	//var ruang = getLayerByName("Ruangan",overlayLayers);
 	//console.log(overlayLayers);
-	getPopupContent(header, name, "" , "","");
+	getPopupContent(header, name, "" , "","",panourl);
 	
 	popUpOver.setPosition(center);
    map.getView().setCenter([lon, lat]);	
@@ -846,7 +858,7 @@ function findInSelectedLayerArray(id)
 	
 	return "";
 }
-function getPopupContent(layername, itemname, imgurl , namaLantai = null,namaGedung = null)
+function getPopupContent(layername, itemname, imgurl , namaLantai = null,namaGedung = null, panoUrl = null)
 {
 	//var name = "";
 	var str = "";
@@ -880,7 +892,23 @@ function getPopupContent(layername, itemname, imgurl , namaLantai = null,namaGed
     }*/
 	
 	//return str;
-}
+	console.log(panoUrl);
+	console.log(panoUrl != null);
+	if(panoUrl == null)
+	{
+	$("#panorama").hide();
+	}
+	if(typeof panoUrl !== 'undefined' && panoUrl != "" && panoUrl != "none" &&  panoUrl != null)
+	{
+	console.log(panoUrl != null);
+		$("#panorama").show();
+		pannellum.viewer('panorama', {
+		"type": "equirectangular",
+		"panorama": "/petakampus/pk-assets/pano-data/"+lyr+"/"+panoUrl,
+		"autoLoad": true
+		});
+	}
+}	
 
 function addRandomFeature(lon,lat) {
     var x =lon;
@@ -927,7 +955,9 @@ $("#search").submit(function(e) {
 					{
 						map.removeLayer(layerSelected);
 					}
-				});				 
+				});
+
+				$("#panorama").hide();				
 				// first clear any existing features in the overlay
 				featureOverlay.getSource().clear(); 
 				$.each(results, function(i, item)
@@ -959,23 +989,24 @@ $("#search").submit(function(e) {
 					  
 					  var geom=new ol.format.GeoJSON().readFeature(realVal.geo).getGeometry();
 					  var format = new ol.format.WKT();
-					  //console.log(center);
-					  var NamaLantaiObj = realVal.namalantai;
 					  
+					  var NamaLantaiObj = realVal.namalantai;
+					  var PanoUrl = realVal.PanoUrl;
+					   console.log(PanoUrl);
 					 /*add selected geom to array*/
 					 var obj = {};
 					 obj.Id = realVal.Id;
 					 obj.data = new ol.format.GeoJSON().readFeature(realVal.geom);
 					 obj.NamaLantai = NamaLantaiObj;					 
-					 console.log(obj);
+					 //console.log(obj);
 					 selectedLayerArray.push(obj);					 
 					/* end of add selected geom to array */
 				
 					  var wkt = format.writeGeometry(geom);
-					  console.log(realVal);
+					  //console.log(realVal);
 					  var namaItem = (realVal.Name) ? realVal.Name : realVal.NamaRuang;
 					  var idItem = realVal.Id;
-					  body = '<li style="padding: 5px;" onClick="CenterMapGeometry(\'' + wkt + '\'' + ',' + '\'' + namaItem + '\''+ ',' + '\'' + capitalizeFirst(j) + '\',\'' + idItem + '\')"><img style="margin-right: 10px;" src="/pk-assets/images/office-block.svg" class="img-responsive pull-left" width="20px">'+ namaItem + '</li><hr>';
+					  body = '<li style="padding: 5px;" onClick="CenterMapGeometry(\'' + wkt + '\'' + ',' + '\'' + namaItem + '\''+ ',' + '\'' + capitalizeFirst(j) + '\',\'' + idItem + '\''+ ',' + '\'' + PanoUrl + '\')"><img style="margin-right: 10px;" src="/pk-assets/images/office-block.svg" class="img-responsive pull-left" width="20px">'+ namaItem + '</li><hr>';
 					  $("#result-list").append(body);
 					  $("#loading-spinner").hide();
 				//	  $("#clear-search").show();
@@ -1180,6 +1211,8 @@ $("#search").submit(function(e) {
 		{
 			map.removeLayer(arrMapLayer[i]);
 		}
+		
+		$("#panorama").hide();
       break;
 
       case 'mode-3d':

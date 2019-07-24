@@ -250,7 +250,7 @@ get_header('map');
 		</select>
 		</form>
 		<div id="result">
-            <img class="img-responsive" src="/pk-assets/images/loading.gif" id="loading-spinner" width="75px">
+            <img class="img-responsive" src="/petakampus/pk-assets/images/loading.gif" id="loading-spinner" width="75px">
 			<ul style="list-style-type: none; padding-left: 5px;" id="result-list"></ul>
 		</div>
 		

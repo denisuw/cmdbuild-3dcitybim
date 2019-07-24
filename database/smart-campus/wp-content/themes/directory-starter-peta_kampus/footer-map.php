@@ -126,7 +126,7 @@
         </div>
       </div>
 
-<script src="/pk-assets/inovamap/0.0.1/js/inovamap.js"></script>
+<script src="/petakampus/pk-assets/inovamap/0.0.1/js/inovamap.js"></script>
 
 
 

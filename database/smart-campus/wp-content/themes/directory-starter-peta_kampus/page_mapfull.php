@@ -37,6 +37,10 @@ get_header('map');
   <div id="popup-content"></div>
 </div>-->
 <div id="map3d"><b>3D VIEW</b><hr><div id="map3dmap"></div></div>
+
+
+
+<div id="panorama"></div>
 <div class="popover fade top in" role="tooltip" id="popup" style="top:-155px;left:-137px;width:300px;display: block;">
 <div class="arrow" style="left: 50%;"></div>
 <h3 class="popover-title">Layer Info 
@@ -47,6 +51,7 @@ get_header('map');
 
 </div>
 </div>
+
 
 <div class="row main-row">
   <div class="col-sm-4 col-md-3 sidebar sidebar-left pull-left" style="z-index: 99999; position: fixed;">
@@ -317,7 +322,7 @@ get_header('map');
 		</select>
 		</form>
 		<div id="result">
-            <img class="img-responsive" src="/pk-assets/images/loading.gif" id="loading-spinner" width="75px">
+            <img class="img-responsive" src="/petakampus/pk-assets/images/loading.gif" id="loading-spinner" width="75px">
 			<ul style="list-style-type: none; padding: 10px; padding-left: 5px;" id="result-list"></ul>
 		</div>
 		
@@ -327,7 +332,12 @@ get_header('map');
   </div>
   
   </div>
+  
 
 
+
+<script>
+
+</script>
 <?php get_footer('map'); ?>
 
