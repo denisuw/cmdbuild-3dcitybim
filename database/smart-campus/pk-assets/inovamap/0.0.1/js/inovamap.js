@@ -252,6 +252,7 @@ var i;
 
 	
 //Initializing Map
+var arrFeatureLayer = [];
 $.ajax({
   url: 'helper/basemap-get.php',
   type: 'GET',
@@ -261,9 +262,16 @@ $.ajax({
     var json = $.parseJSON(response);
     json.data.forEach(function(item) {
 	
-        if(item.base_layer == "main_layer") {
+        if(item.base_layer == "main_layer") 
+		{
         if(item.active == true) {
-          if(item.name == "Ruangan") {
+		var obj = {};
+		obj.name = item.name;
+		obj.params = item.params;
+		arrFeatureLayer.push(obj);
+					
+          if(item.name == "Ruangan") 
+		  {
             var overlay = new ol.layer.Tile({
               title: item.title,
               name: item.name,
@@ -284,7 +292,9 @@ $.ajax({
             });
             overlayLayers.push(overlay);
 
-          } else {
+          } 
+		  else 
+		  {
            var overlay = new ol.layer.Tile({
               title: item.title,
               name: item.name,
@@ -306,6 +316,9 @@ $.ajax({
             overlayLayers.push(overlay);
 			//console.log(overlay.getProperties());
 			//console.log(overlay);
+			
+			//populate object feature
+			
           }
         }
       } else if(item.base_layer == "tile") {
@@ -337,7 +350,7 @@ $.ajax({
 		for (i = 0; i < li.length; i++) {
 		  li[i].addEventListener("change", function() {
 			var objLayer = getLayerByName(this.value,overlayLayers);
-			//console.log(objLayer);
+			
 			if(objLayer != null)
 			{
 				if(this.checked) {
@@ -350,6 +363,8 @@ $.ajax({
 		});
 		}
 	
+
+	 
   },
   error:function(err){
     console.log(err);
@@ -525,7 +540,7 @@ function getInfo(layer, evt) {
 
   //End function
 
-
+//Start Map
   var map = new ol.Map({
 	//controls: ol.control.defaults({}, [    ]),
 	//interactions: ol.interaction.defaults().extend([dragAndDropInteraction]),
@@ -542,7 +557,66 @@ function getInfo(layer, evt) {
     projection: 'EPSG:4326',
     view: view
   });
+  
+  map.on('moveend', onMoveEnd);
 
+////////////////Update Image Gallery
+ function onMoveEnd(evt) {
+ //console.log(arrFeatureLayer);
+ arrImageSlider = [];
+        var map = evt.map;
+        var extent = map.getView().calculateExtent(map.getSize());
+	 for(var i = 0;i<arrFeatureLayer.length;i++)
+	 {
+		var item = arrFeatureLayer[i];
+	  $.ajax({
+			url: 'http://localhost:8585/geoserver/petakampusitb/ows?service=WFS&version=1.0.0&request=GetFeature&typeName='+item.params+'&maxFeatures=10&bbox=' + extent.join(',')+ '&outputFormat=application%2Fjson',
+			type: 'post',
+			cache: false,
+			success: function(response) {			  
+			 if(response.features.length > 0)
+			{
+				var thumb_image = '';
+				var c = arrImageSlider.concat(response.features); 
+				//console.log(c);
+			  arrImageSlider = c;
+			  //console.log(arrImageSlider);
+			  //console.log(randomValue(arrImageSlider));
+			  
+				var count = 1;
+				var image_limit = 10;
+				
+				for ( var i = 0;i< arrImageSlider.length;i++) 
+				{
+					if (count > image_limit) {
+						break;
+					}
+	
+					var item = arrImageSlider[i];
+					
+					var caption = item.properties.Name;
+					item.img_url = "http://localhost:8082/petakampus/wp-content/uploads/2017/11/13_88_itb-cirebon.jpg";//testing
+					thumb_image += '<div><img u="image" src="' + item.img_url + '" />  <div class="title">' +caption+ '</div> </div>';
+					count++;
+				}
+				
+				//$("#slideItem").html(thumb_image); 
+				//jssor_slider1_init();
+				//console.log($("#slideItem").html());
+			 }
+			 
+			 
+			}
+		  });
+	}
+
+	
+}
+	  
+function randomValue(arrValue) {
+   return arrValue[Math.floor(Math.random() * arrValue.length)];
+}	
+	 
 var collection = new ol.Collection();
 var featureOverlay = new ol.layer.Vector({
   map: map,
@@ -671,6 +745,8 @@ ol.proj.addProjection(UTM48Sprojection);
 	  
 	  //map click
     map.on('click', function(evt) {
+	console.log(evt);
+	console.log(evt.pixel);
       var layer = map.forEachLayerAtPixel(evt.pixel, function(layer) {      
         return layer;
       });
@@ -1620,6 +1696,7 @@ map.on('pointermove', function (e) {
   var hit = map.hasFeatureAtPixel(pixel);
 
   map.getTargetElement().style.cursor = hit ? 'pointer' : '';
+  
 });
 
 // from https://github.com/DmitryBaranovskiy/raphael
@@ -1685,6 +1762,6 @@ $("#filter-toggle").on('click', function(e) {
 
 
 $(document).ready(function() {
-       
+
       });
 	  
