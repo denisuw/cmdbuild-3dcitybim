@@ -271,11 +271,20 @@ var map, featureList, boroughSearch = [], theaterSearch = [], museumSearch = [],
 						var namaLayer = obj.id.split('.')[0];
 						var idItem = obj.properties.Id;
 						var PanoUrl = "";
-						obj.img_url = "http://localhost:8082/petakampus/wp-content/uploads/2017/11/13_88_itb-cirebon.jpg";//testing
-						thumb_image += '<div onclick="ZoomToObject(\'' + caption + '\''+ ',' + '\'' + namaLayer + '\',\'' + idItem + '\''+ ',' + '\'' + PanoUrl + '\');"><img data-u="image"  src="' + obj.img_url + '" />  <div class="title">' +caption+ '</div> </div>';		
+						var linkimg = '/petakampus/pk-assets/image-data/thumb/'+namaLayer+'/'+obj.img_url;
+						//linkimg = "http://localhost:8082/petakampus/wp-content/uploads/2017/11/13_88_itb-cirebon.jpg";//testing
+						thumb_image += '<div onclick="ZoomToObject(\'' + caption + '\''+ ',' + '\'' + namaLayer + '\',\'' + idItem + '\''+ ',' + '\'' + PanoUrl + '\');"><img data-u="image"  src="'+linkimg+'" />  <div class="title">' +caption+ '</div> </div>';		
 					}					
 				}
 				
+				if(selectedGalleryLayerArray.length < 10 )
+				{
+					var lessNumber = 9 - selectedGalleryLayerArray.length;
+					for(var i= 0;i<lessNumber;i++)
+					{
+						thumb_image += '<div><img data-u="image" src="" /><div class="title">No Object</div> </div>';
+					}
+				}
 				//console.log("reload");
 				
 				//arrSlider.push(thumb_image);
