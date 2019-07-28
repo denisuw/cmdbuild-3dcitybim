@@ -331,9 +331,8 @@ get_header('map');
 	</div>
   </div>
   
-  </div>
-  
 
+  </div>
 
 
 <script>

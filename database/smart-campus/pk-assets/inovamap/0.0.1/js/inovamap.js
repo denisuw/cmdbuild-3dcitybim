@@ -79,6 +79,7 @@ var content = document.getElementById('popup-content');
 var closer = document.getElementById('popup-closer');
 var divLayerMenu = document.getElementById('divLayerMenu');
 var selectedLayerArray = [];
+var selectedGalleryLayerArray = [];
 var citydbname = 'petakampusitb';
 var lod=4;
 var getbuilding;
@@ -257,7 +258,7 @@ $.ajax({
   url: 'helper/basemap-get.php',
   type: 'GET',
   success: function(response) {
-    	   console.log('bb');
+    	  // console.log('bb');
 
     var json = $.parseJSON(response);
     json.data.forEach(function(item) {
@@ -363,7 +364,7 @@ $.ajax({
 		});
 		}
 	
-
+//console.log(overlayLayers);
 	 
   },
   error:function(err){
@@ -416,7 +417,7 @@ var layersGroupDB=[
   
   	map.getLayers().forEach(function(layer){
 		//console.log(layer);
-        console.log(layer.getProperties());
+        //console.log(layer.getProperties());
 			if(layer.getProperties().title == "layerselection")
 			{
 				map.removeLayer(layerSelected);
@@ -435,7 +436,7 @@ $("#resetButton").click(function() {
   closer.blur();
 		  map.getLayers().forEach(function(layer){
 		//console.log(layer);
-        console.log(layer.getProperties());
+        //console.log(layer.getProperties());
 			if(layer.getProperties().title == "layerselection")
 			{
 				map.removeLayer(layerSelected);
@@ -448,7 +449,7 @@ $("#resetButton").click(function() {
 
 function getLayerByName(layerName, arrLayer)
 {
-//console.log(arrLayer);
+
 //console.log(layerName);
 
 	for(var i = 0;i<arrLayer.length;i++)
@@ -510,7 +511,7 @@ function getInfo(layer, evt) {
               }
 			  else if (id.toLowerCase().indexOf("ruangan") >= 0)
 			  {
-                name = feature.properties.NamaRuang;
+                name = feature.properties.Name;
 				namaLantai = feature.properties.NamaLantai;
 				namaGedung = feature.properties.NamaGedung;
 				panourl = feature.properties.PanoUrl;
@@ -563,56 +564,54 @@ function getInfo(layer, evt) {
 ////////////////Update Image Gallery
  function onMoveEnd(evt) {
  //console.log(arrFeatureLayer);
+ //console.log($("#slideItem").html());
+ var randomVal = Math.floor(Math.random() * 100); 
  arrImageSlider = [];
         var map = evt.map;
         var extent = map.getView().calculateExtent(map.getSize());
+	var thumb_image = '';	
 	 for(var i = 0;i<arrFeatureLayer.length;i++)
 	 {
 		var item = arrFeatureLayer[i];
-	  $.ajax({
-			url: 'http://localhost:8585/geoserver/petakampusitb/ows?service=WFS&version=1.0.0&request=GetFeature&typeName='+item.params+'&maxFeatures=10&bbox=' + extent.join(',')+ '&outputFormat=application%2Fjson',
-			type: 'post',
-			cache: false,
-			success: function(response) {			  
-			 if(response.features.length > 0)
-			{
-				var thumb_image = '';
-				var c = arrImageSlider.concat(response.features); 
-				//console.log(c);
-			  arrImageSlider = c;
-			  //console.log(arrImageSlider);
-			  //console.log(randomValue(arrImageSlider));
-			  
-				var count = 1;
-				var image_limit = 10;
-				
-				for ( var i = 0;i< arrImageSlider.length;i++) 
+		
+		
+		if(item.name != "Ruangan" || (item.name == "Ruangan" && map.getView().getZoom() > 17))
+		{
+			$.ajax({
+				url: 'http://localhost:8585/geoserver/petakampusitb/ows?service=WFS&version=1.0.0&request=GetFeature&typeName='+item.params+'&maxFeatures=9&bbox=' + extent.join(',')+ '&outputFormat=application%2Fjson',
+				type: 'post',
+				cache: false,
+				async: false,
+				success: function(response) {			  
+				 if(response.totalFeatures > 0)
 				{
-					if (count > image_limit) {
-						break;
-					}
-	
-					var item = arrImageSlider[i];
-					
-					var caption = item.properties.Name;
-					item.img_url = "http://localhost:8082/petakampus/wp-content/uploads/2017/11/13_88_itb-cirebon.jpg";//testing
-					thumb_image += '<div><img u="image" src="' + item.img_url + '" />  <div class="title">' +caption+ '</div> </div>';
-					count++;
+					arrImageSlider.push(response.features);				 					
+				 }
+				 else
+				 {
+				 console.log("no feature");
+				 }
+				 
 				}
-				
-				//$("#slideItem").html(thumb_image); 
-				//jssor_slider1_init();
-				//console.log($("#slideItem").html());
-			 }
-			 
-			 
-			}
 		  });
+		} 
 	}
-
 	
+	/*var obj = {};
+	obj.Id = realVal.Id;
+	obj.data = new ol.format.GeoJSON().readFeature(realVal.geom);
+	obj.NamaLantai = NamaLantaiObj;					 
+	selectedLayerArray.push(obj);					 
+	var wkt = format.writeGeometry(geom);
+	var namaItem = (realVal.Name) ? realVal.Name : realVal.Name;
+	var idItem = realVal.Id;*/
+					  
+	jssor_slider1_init(arrImageSlider);
+	//console.log(arrImageSlider);
 }
-	  
+  
+  
+
 function randomValue(arrValue) {
    return arrValue[Math.floor(Math.random() * arrValue.length)];
 }	
@@ -745,8 +744,8 @@ ol.proj.addProjection(UTM48Sprojection);
 	  
 	  //map click
     map.on('click', function(evt) {
-	console.log(evt);
-	console.log(evt.pixel);
+	//console.log(evt);
+	//console.log(evt.pixel);
       var layer = map.forEachLayerAtPixel(evt.pixel, function(layer) {      
         return layer;
       });
@@ -808,11 +807,44 @@ var strokeStyle = new ol.style.Stroke({
 });
 
 
-window.LineToObj = function (lat, lon) {
+window.LineToObj = function (lat, lat) {
 var point = null;
 var line = null;
 
-  alert (lon + " " + lat);
+  alert (lat + " " + lat);
+}
+
+window.ZoomToObject = function (namaItem,namaLayer,idItem,PanoUrl) {
+var point = null;
+var line = null;
+ map.getLayers().forEach(function(layer){
+	if(layer.getProperties().title == "layerselection")
+	{
+		map.removeLayer(layerSelected);
+	}
+});
+ // alert (namaItem + " " + namaLayer +" "+idItem);
+  
+  	var objArr = findInGalleryLayerArray(idItem);
+	var feat = new ol.format.GeoJSON().readFeature(objArr.wkt).getGeometry();
+	var ext=feat.getExtent();
+	var center = ol.extent.getCenter(ext);
+	var lon=center[0];
+	var lat=center[1];
+
+
+	sourceSelected.clear();
+    sourceSelected.addFeature(objArr.data);
+		 layerSelected = new ol.layer.Vector({
+        source: sourceSelected,
+        style: selectedstyle,
+		title: "layerselection"
+      });   
+	 map.addLayer(layerSelected);
+	getPopupContent(namaLayer, namaItem, "" , "","",PanoUrl);
+	
+	popUpOver.setPosition(center);
+    map.getView().setCenter([lon, lat]);	
 }
 
 
@@ -837,7 +869,7 @@ window.CenterMapGeometry =  function (wkt, name, header, id,panourl) {
 
 	var objArr = findInSelectedLayerArray(id);
 	var nolantai = objArr.NamaLantai;
-	console.log(nolantai);
+	//console.log(objArr.data);
 	//console.log(objArr);
 	sourceSelected.clear();
     sourceSelected.addFeature(objArr.data);
@@ -934,6 +966,19 @@ function findInSelectedLayerArray(id)
 	
 	return "";
 }
+
+function findInGalleryLayerArray(id)
+{
+	for(var i = 0;i<getGalleryArray().length;i++)
+	{
+		if(getGalleryArray()[i].Id == id)
+		{
+			return getGalleryArray()[i];
+		}
+	}
+	
+	return "";
+}
 function getPopupContent(layername, itemname, imgurl , namaLantai = null,namaGedung = null, panoUrl = null)
 {
 	//var name = "";
@@ -968,8 +1013,8 @@ function getPopupContent(layername, itemname, imgurl , namaLantai = null,namaGed
     }*/
 	
 	//return str;
-	console.log(panoUrl);
-	console.log(panoUrl != null);
+	//console.log(panoUrl);
+	//console.log(panoUrl != null);
 	if(panoUrl == null)
 	{
 	$("#panorama").hide();
@@ -1026,7 +1071,7 @@ $("#search").submit(function(e) {
 			{
 				 map.getLayers().forEach(function(layer){
 				//console.log(layer);
-				console.log(layer.getProperties());
+				//console.log(layer.getProperties());
 					if(layer.getProperties().title == "layerselection")
 					{
 						map.removeLayer(layerSelected);
@@ -1068,7 +1113,7 @@ $("#search").submit(function(e) {
 					  
 					  var NamaLantaiObj = realVal.namalantai;
 					  var PanoUrl = realVal.PanoUrl;
-					   console.log(PanoUrl);
+					  // console.log(PanoUrl);
 					 /*add selected geom to array*/
 					 var obj = {};
 					 obj.Id = realVal.Id;
@@ -1080,8 +1125,14 @@ $("#search").submit(function(e) {
 				
 					  var wkt = format.writeGeometry(geom);
 					  //console.log(realVal);
-					  var namaItem = (realVal.Name) ? realVal.Name : realVal.NamaRuang;
+					  var namaItem = (realVal.Name) ? realVal.Name : realVal.Name;
 					  var idItem = realVal.Id;
+					  
+					  //console.log(realVal.geo);
+					 // console.log(namaItem);
+					 // console.log(capitalizeFirst(j));
+					 // console.log(idItem);
+					  
 					  body = '<li style="padding: 5px;" onClick="CenterMapGeometry(\'' + wkt + '\'' + ',' + '\'' + namaItem + '\''+ ',' + '\'' + capitalizeFirst(j) + '\',\'' + idItem + '\''+ ',' + '\'' + PanoUrl + '\')"><img style="margin-right: 10px;" src="/pk-assets/images/office-block.svg" class="img-responsive pull-left" width="20px">'+ namaItem + '</li><hr>';
 					  $("#result-list").append(body);
 					  $("#loading-spinner").hide();
@@ -1311,8 +1362,8 @@ $("#search").submit(function(e) {
   {  	
 	//buildingid=[];
 	//buildings=[];
-	console.log(buildingid);
-	console.log(buildingid.length);
+	//console.log(buildingid);
+	//console.log(buildingid.length);
 	if(buildingid.length == 0)
 	{
 	 $.post('helper/requestdata.php?request=2',{lod:lod},function(dbbuilding){

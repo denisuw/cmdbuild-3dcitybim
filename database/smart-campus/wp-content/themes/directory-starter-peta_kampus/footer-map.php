@@ -3,12 +3,12 @@
           <div class="open"><button id="button" type="button" class="btn btn-primary" data-toggle="collapse" data-target="#demo">
       <span class="glyphicon glyphicon-collapse-down"></span> Show
     </button></div>
-          <div class="content">
+          <div class="content" style="display:none;">
           <div id="slider1_container" style="position: relative; top: 0px; left: 0px; width: 1366px; height: 100px; overflow: hidden; ">
 
 
         <!-- Slides Container -->
-        <div u="slides" style="position: absolute; left: 0px; top: 0px; width: 1366px; height: 100px; overflow: hidden; cursor: pointer;">
+        <div u="slides" id="slideItem" style="position: absolute; left: 0px; top: 0px; width: 1366px; height: 100px; overflow: hidden; cursor: pointer;">
 		
 <?php
 		$image_limit = '';
@@ -16,6 +16,8 @@
 			$image_limit = (int)$package_info->image_limit;
 		}
 		$post_images = petakampus_get_images_geo();
+		//echo '<script>console.log("data image")</script>';
+		
 		$thumb_image = '';
 		if ( ! empty( $post_images ) ) {
 			$count = 1;
@@ -23,15 +25,17 @@
 				if ($image_limit !== '' && $count > $image_limit) {
 					break;
 				}
+
+				
 				$caption = ( ! empty( $image->caption ) ) ? $image->caption : '';
 				//$thumb_image .= '<a href="' . $image->src . '" title="' . $caption . '">';
 				//$thumb_image .= geodir_show_image( $image, 'thumbnail', true, false );
 				//$thumb_image .= '</a>';
-				$thumb_image .= '<div><img u="image" onclick="LineToObj(' . $image->latitude . ','. $image->longitude .');" src="' . $image->src . '" />  <div class="title">' . $caption . '</div> </div>';
+				$thumb_image .= '<div onclick="LineToObj(' . $image->latitude . ','. $image->longitude .');"><img u="image" src="' . $image->src . '" />  <div class="title">' . $caption . '</div> </div>';
 				$count++;
 			}
 		}
-		echo $thumb_image;
+		//echo $thumb_image;
 ?>		
 
         </div>
@@ -118,7 +122,7 @@
         <!--#endregion Arrow Navigator Skin End -->
         <!-- Trigger -->
         <script>
-            jssor_slider1_init();
+           jssor_slider1_init();
         </script>
     </div>
     <!-- Jssor Slider End -->

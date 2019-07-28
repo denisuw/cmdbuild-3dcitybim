@@ -187,10 +187,11 @@
         }        
     });
 });
-
-
-var map, featureList, boroughSearch = [], theaterSearch = [], museumSearch = [];
-        jssor_slider1_init = function () {
+var jssor_slider1;
+var arrSlider = [];
+var lastRandomVal = 0;
+var map, featureList, boroughSearch = [], theaterSearch = [], museumSearch = [], selectedGalleryLayerArray = [];
+        jssor_slider1_init = function (html = null, randomVal = 0) {
             var options = {
                 $AutoPlay: 0,                                    //[Optional] Auto play or not, to enable slideshow, this option must be set to greater than 0. Default value is 0. 0: no auto play, 1: continuously, 2: stop at last slide, 4: stop on click, 8: stop on user navigation (by arrow/bullet/thumbnail/drag/arrow key navigation)
                 $AutoPlaySteps: 4,                                  //[Optional] Steps to go for each navigation request (this options applys only when slideshow disabled), the default value is 1
@@ -203,7 +204,7 @@ var map, featureList, boroughSearch = [], theaterSearch = [], museumSearch = [];
                 $SlideWidth: 150,                                   //[Optional] Width of every slide in pixels, default value is width of 'slides' container
                 $SlideHeight: 100,                                //[Optional] Height of every slide in pixels, default value is height of 'slides' container
                 $SlideSpacing: 3, 					                //[Optional] Space between each slide in pixels, default value is 0
-                $Cols: 9,                                  //[Optional] Number of pieces to display (the slideshow would be disabled if the value is set to greater than 1), the default value is 1
+                $Cols: 10,                                  //[Optional] Number of pieces to display (the slideshow would be disabled if the value is set to greater than 1), the default value is 1
                 $ParkingPosition: 0,                              //[Optional] The offset position to park slide (this options applys only when slideshow disabled), default value is 0.
                 $UISearchMode: 1,                                   //[Optional] The way (0 parellel, 1 recursive, default value is 1) to search UI components (slides container, loading screen, navigator container, arrow navigator container, thumbnail navigator container etc).
                 $PlayOrientation: 1,                                //[Optional] Orientation to play slide (for auto play, navigation), 1 horizental, 2 vertical, 5 horizental reverse, 6 vertical reverse, default value is 1
@@ -227,9 +228,62 @@ var map, featureList, boroughSearch = [], theaterSearch = [], museumSearch = [];
                     $Steps: 4                                       //[Optional] Steps to go for each navigation request, default value is 1
                 }
             };
-
-            var jssor_slider1 = new $JssorSlider$('slider1_container', options);
-
+			//console.log(html);
+			
+            var thumb_image = "";
+			selectedGalleryLayerArray = [];
+			//var currentIndex = jssor_slider1.$CurrentIndex();
+			if(jssor_slider1 == null)
+			{
+				//console.log("init");
+				jssor_slider1 = new $JssorSlider$('slider1_container', options);
+			}
+			if(html!= null)
+			{			
+				//html = removeDuplicates(html,"id");	
+				
+				console.log(html);
+				for ( var i = 0;i< html.length;i++) 
+				{					
+					var item = html[i];
+					for(var j = 0;j<item.length;j++)
+					{
+						var obj = item[j];
+						console.log(obj);
+						var caption = obj.properties.Name;
+						var wkt = obj.geometry;
+						var feat = new ol.format.GeoJSON().readFeature(wkt).getGeometry();
+						   var ext=feat.getExtent();
+							var center = ol.extent.getCenter(ext);
+							var lon=center[0];
+							var lat=center[1];
+						//console.log(lon);
+						//console.log(lat);
+						//console.log(feat);
+						//console.log(center);
+						
+						var objItem = {};
+						objItem.Id = idItem;
+						objItem.data = new ol.format.GeoJSON().readFeature(wkt);
+						objItem.wkt = wkt;
+						selectedGalleryLayerArray.push(objItem);
+						
+						var namaLayer = obj.id.split('.')[0];
+						var idItem = obj.properties.Id;
+						var PanoUrl = "";
+						obj.img_url = "http://localhost:8082/petakampus/wp-content/uploads/2017/11/13_88_itb-cirebon.jpg";//testing
+						thumb_image += '<div onclick="ZoomToObject(\'' + caption + '\''+ ',' + '\'' + namaLayer + '\',\'' + idItem + '\''+ ',' + '\'' + PanoUrl + '\');"><img data-u="image"  src="' + obj.img_url + '" />  <div class="title">' +caption+ '</div> </div>';		
+					}					
+				}
+				
+				//console.log("reload");
+				
+				//arrSlider.push(thumb_image);
+				
+				jssor_slider1.$ReloadSlides(thumb_image);
+			}
+			
+			lastRandomVal = randomVal;
             //responsive code begin
             //you can remove responsive code if you don't want the slider scales while window resizing
             function ScaleSlider() {
@@ -240,7 +294,9 @@ var map, featureList, boroughSearch = [], theaterSearch = [], museumSearch = [];
                 else
                     window.setTimeout(ScaleSlider, 30);
             }
-
+			
+			
+			
           //  ScaleSlider();
           //  $Jssor$.$AddEvent(window, "load", ScaleSlider);
 
@@ -248,7 +304,24 @@ var map, featureList, boroughSearch = [], theaterSearch = [], museumSearch = [];
           //  $Jssor$.$AddEvent(window, "orientationchange", ScaleSlider);
             ////responsive code end
         };
-
+		
+window.getGalleryArray =  function ()
+{
+	return selectedGalleryLayerArray;
+}
+		
+		function removeDuplicates(myArr, prop) {
+			return myArr.filter((obj, pos, arr) => {
+				return arr.map(mapObj => mapObj[prop]).indexOf(obj[prop]) === pos;
+			});
+}
+		function AppendSlide(html)
+		{
+			//var currentIndex = jssor_slider1.$CurrentIndex();
+			//console.log(jssor_slider1);
+			//jssor_slider1.$AppendSlides(html, currentIndex);
+		}
+		
 		$(document).ready(function() {
   			$('.footerDrawer .open').on('click', function() {
     			$('.footerDrawer .content').slideToggle();
