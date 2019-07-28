@@ -269,8 +269,11 @@ $.ajax({
 		var obj = {};
 		obj.name = item.name;
 		obj.params = item.params;
-		arrFeatureLayer.push(obj);
-					
+		
+		if(item.has_image == true) 
+		{
+			arrFeatureLayer.push(obj);
+		}			
           if(item.name == "Ruangan") 
 		  {
             var overlay = new ol.layer.Tile({
