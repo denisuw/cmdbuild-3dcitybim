@@ -53,6 +53,31 @@
 		  $("#resetButton").show();
 		  $("#search-button").hide();
        });
+	   
+	          $("#listButton").click(function() {
+		  var thisEl = $(this); 
+          
+		  $("#accordion-left").show();
+		  $("#accordion-left-route").hide(); 
+		  $("#routeButton").show();
+		//  if ($("#routeButton").is(":visible")) {};
+	//	  $('.sidebar-left .sidebar-body').toggle('slide');
+          thisEl.hide();
+          applyMargins();
+       });
+	   
+	          $("#routeButton").click(function() {
+          var thisEl = $(this); 
+          
+		  $("#accordion-left-route").show();	
+		  $("#accordion-left").hide();	
+		  $("#listButton").show();
+		 // if ($("#listButton").is(":visible")) {};  
+		  //$('.sidebar-left .sidebar-body').toggle('slide');
+          thisEl.hide();
+          applyMargins();
+       });
+
       });
 	  
 	  $(document).ready(function() {
@@ -65,35 +90,6 @@
           container.slideUp(300);
        });
       });
-	  
-	  $(document).ready(function() {
-       $("#listButton").click(function() {
-		  var thisEl = $(this); 
-          
-		  $("#accordion-left").show();
-		  $("#accordion-left-route").hide(); 
-		  $("#routeButton").show();
-		//  if ($("#routeButton").is(":visible")) {};
-	//	  $('.sidebar-left .sidebar-body').toggle('slide');
-          thisEl.hide();
-          applyMargins();
-       });
-      });
-	  
-	  $(document).ready(function() {
-       $("#routeButton").click(function() {
-          var thisEl = $(this); 
-          
-		  $("#accordion-left-route").show();	
-		  $("#accordion-left").hide();	
-		  $("#listButton").show();
-		 // if ($("#listButton").is(":visible")) {};  
-		  //$('.sidebar-left .sidebar-body').toggle('slide');
-          thisEl.hide();
-          applyMargins();
-       });
-      });
-
 		
 		  
       $(function(){
@@ -246,10 +242,11 @@ var map, featureList, boroughSearch = [], theaterSearch = [], museumSearch = [],
 				for ( var i = 0;i< html.length;i++) 
 				{					
 					var item = html[i];
+					console.log(item);
 					for(var j = 0;j<item.length;j++)
 					{
 						var obj = item[j];
-						console.log(obj);
+						//console.log(obj);
 						var caption = obj.properties.Name;
 						var wkt = obj.geometry;
 						var feat = new ol.format.GeoJSON().readFeature(wkt).getGeometry();
@@ -263,18 +260,23 @@ var map, featureList, boroughSearch = [], theaterSearch = [], museumSearch = [],
 						//console.log(center);
 						
 						var objItem = {};
+						var idItem = obj.properties.Id;
 						objItem.Id = idItem;
 						objItem.data = new ol.format.GeoJSON().readFeature(wkt);
 						objItem.wkt = wkt;
+						objItem.name = caption;
 						selectedGalleryLayerArray.push(objItem);
-						
+						//console.log(objItem);	
+						//console.log(selectedGalleryLayerArray);
 						var namaLayer = obj.id.split('.')[0];
-						var idItem = obj.properties.Id;
+						
 						var PanoUrl = "";
 						var linkimg = '/petakampus/pk-assets/image-data/thumb/'+namaLayer+'/'+obj.img_url;
 						//linkimg = "http://localhost:8082/petakampus/wp-content/uploads/2017/11/13_88_itb-cirebon.jpg";//testing
 						thumb_image += '<div onclick="ZoomToObject(\'' + caption + '\''+ ',' + '\'' + namaLayer + '\',\'' + idItem + '\''+ ',' + '\'' + PanoUrl + '\');"><img data-u="image"  src="'+linkimg+'" />  <div class="title">' +caption+ '</div> </div>';		
-					}					
+						//console.log(linkimg);
+					}
+					
 				}
 				
 				if(selectedGalleryLayerArray.length < 10 )
@@ -316,6 +318,7 @@ var map, featureList, boroughSearch = [], theaterSearch = [], museumSearch = [],
 		
 window.getGalleryArray =  function ()
 {
+	//console.log(selectedGalleryLayerArray);
 	return selectedGalleryLayerArray;
 }
 		
