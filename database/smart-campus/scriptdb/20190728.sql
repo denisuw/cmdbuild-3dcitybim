@@ -1,6 +1,6 @@
-﻿DROP VIEW public.view_building_room_geom;
+﻿DROP VIEW gis.view_building_room_geom;
 
-CREATE OR REPLACE VIEW public.view_building_room_geom AS 
+CREATE OR REPLACE VIEW gis.view_building_room_geom AS 
  SELECT b."Id",
     d."Name" AS "NamaGedung",
     c."Name" AS "NamaLantai",
@@ -27,10 +27,10 @@ CREATE OR REPLACE VIEW public.view_building_room_geom AS
      JOIN "Floor" c ON b."Floor" = c."Id"
      JOIN "Building" d ON c."Building" = d."Id";
 
-ALTER TABLE public.view_building_room_geom
+ALTER TABLE gis.view_building_room_geom
   OWNER TO postgres;
 
 GO
 
-ALTER TABLE public.basemap
+ALTER TABLE gis.basemap
 ADD COLUMN has_image boolean;
