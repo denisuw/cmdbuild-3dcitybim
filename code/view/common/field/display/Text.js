@@ -76,6 +76,33 @@
 					]
 				});
 			}
+			if(this.fieldLabel == "CCTVUrl")
+			{
+				Ext.apply(this, {
+					delegate: Ext.create('CMDBuild.controller.common.field.display.Text', { view: this }),
+					items: [
+						this.detailsButton = Ext.create('CMDBuild.core.buttons.iconized.Export', {
+							style: {
+								background: 'none'
+							},
+							text: '',
+							border: false,
+							scope: this,
+							hidden: true,
+
+							handler: function (button, e) {
+							
+								this.delegate.cmfg('onFieldDisplayCCTVButtonClick');
+							}
+						}),
+						this.displayField = Ext.create('Ext.form.field.Display', {
+							name: this.name,
+							allowBlank: this.allowBlank,
+							flex: 1
+						})
+					]
+				});
+			}
 			else
 			{
 				Ext.apply(this, {
