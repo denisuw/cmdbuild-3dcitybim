@@ -15,6 +15,7 @@
    */
   cmfgCatchedFunctions: [
    'onFieldDisplayTextDetailsButtonClick',
+   'onFieldDisplayCCTVButtonClick',
    'onFieldDisplayPanoDetailsButtonClick',
    'onFieldDisplayTextRawValueGet',
    'onFieldDisplayTextReset',
@@ -63,6 +64,69 @@
    //alert("onFieldDisplayTextDetailsButtonClick58");
    this.detailsWindow.configureAndShow(this.cmfg('onFieldDisplayTextValueGet'));
 
+  },
+  onFieldDisplayCCTVButtonClick: function() 
+  {
+	var url = this.cmfg('onFieldDisplayTextValueGet');
+		var myTopToolbar = {
+							text : url,
+							handler :function(){
+								// I disable the parent window.
+								x.disable();
+
+							}};
+		var str = "<div id=\"bck\" class=\"overlay\"></div> "+
+							"<div id=\"modal-video\" class=\"overlay-modal\"> "+
+							  "<video id=\"video_element\" class=\"vid\" width=\"100%\" autoplay>"+
+								 "<source id=\"video1\" src=\"\" type=\"video/mp4\">"+
+								  "Your browser does not support HTML5 video."+
+							  "</video>"+
+							"</div>";
+		var x = Ext.create("Ext.Window",{
+						title : 'Outdoor CCTV Live Streaming',
+						width : 1000,
+						height: 500,
+						html : str
+					}).show();	
+		function fadeIn(el) {   
+							el.style.opacity = 0;
+							el.style.display = "block";
+							var tick = function() {
+								el.style.opacity = +el.style.opacity + 0.05;
+								if (+el.style.opacity <= 0.8) {
+									(window.requestAnimationFrame && requestAnimationFrame(tick)) || setTimeout(tick, 10)
+								}
+							};
+							tick();
+						}   
+
+						function show_modal(){
+							document.getElementById('modal-video').style.display = 'block';
+						}
+
+						//plays the video in cinema-view
+						function play_video(vid){
+							var vid = vid;
+							//disable background
+							var el = document.getElementById("bck");
+							document.getElementsByTagName('body')[0].style.overflow = 'hidden';
+							fadeIn(el);
+							el.style.display = 'block';
+
+							//show video modal
+							var el = document.getElementById("modal-video");
+							fadeIn(el);
+							el.style.opacity ='1';
+							setTimeout(show_modal, 800);
+							//To set the source you need to select 
+							var video = document.getElementById("video_element");
+							video.src = vid;
+							video.play();
+						}
+
+						var overlay = document.getElementById('bck');
+						fadeIn(overlay);
+						play_video(url);	
   },
   onFieldDisplayPanoDetailsButtonClick: function() {
    //alert("onFieldDisplayPanoDetailsButtonClick");		
