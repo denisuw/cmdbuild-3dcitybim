@@ -9,7 +9,7 @@ We also upgrade the two-dimensional (2D) map in CMDBuild to three-dimensional (3
 3. Spatial Analysis Investigation that would be important in the management of CH asset/facility
 
 We use some open source applications, and the list are (MS Windows Operating System):
-- CMDBuild v2.5.1, http://www.cmdbuild.org/en/download
+- CMDBuild v3.3.3, http://www.cmdbuild.org/en/download
 - PostgreSQL v9.4.17, https://www.postgresql.org/download/ or https://www.enterprisedb.com/downloads/postgres-postgresql-downloads
 - PostGIS v2.2.3, https://postgis.net/windows_downloads/
 - GeoServer v2.11.0, http://geoserver.org/download/
